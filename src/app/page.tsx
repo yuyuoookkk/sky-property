@@ -13,8 +13,10 @@ import {
   ChevronLeft,
   Clock,
   Shield,
-  Tag
+  Tag,
+  Globe
 } from "lucide-react";
+import { translations, type Language } from "./translations";
 
 // Property data supporting both lease and sale land listings
 interface Property {
@@ -294,6 +296,9 @@ const PROPERTIES: Property[] = [
 ];
 
 export default function HomePage() {
+  const [language, setLanguage] = useState<Language>("en");
+  const t = (key: string) => translations[language][key] || key;
+  
   const [activeCategory, setActiveCategory] = useState<"lease" | "sale">("lease");
   
   // Filter properties based on the selected category
@@ -381,20 +386,30 @@ export default function HomePage() {
           </div>
           
           <nav className="hidden md:flex items-center gap-10 text-xs uppercase tracking-widest text-text-muted">
-            <a href="#villas" className="hover:text-primary transition-colors duration-200">Portfolio</a>
-            <a href="#philosophy" className="hover:text-primary transition-colors duration-200">Philosophy</a>
+            <a href="#villas" className="hover:text-primary transition-colors duration-200">{t("nav.portfolio")}</a>
+            <a href="#philosophy" className="hover:text-primary transition-colors duration-200">{t("nav.philosophy")}</a>
             <a href="#contact" className="hover:text-primary transition-colors duration-200" onClick={(e) => {
               e.preventDefault();
               setIsInquiryOpen(true);
-            }}>Contact</a>
+            }}>{t("nav.contact")}</a>
           </nav>
           
-          <div>
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Language Toggle */}
+            <button
+              id="language-toggle"
+              onClick={() => setLanguage(language === "en" ? "id" : "en")}
+              className="flex items-center gap-1.5 text-[10px] sm:text-xs uppercase tracking-widest px-3 sm:px-4 py-2 sm:py-2.5 rounded-full border border-border-custom hover:border-accent hover:text-accent text-text-muted transition-all duration-300 font-semibold"
+              aria-label="Toggle language"
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span>{t("lang.switch")}</span>
+            </button>
             <button 
               onClick={() => setIsInquiryOpen(true)}
               className="bg-accent text-secondary text-[10px] sm:text-xs uppercase tracking-widest px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-accent-hover transition-all duration-300 font-semibold shadow-sm"
             >
-              Inquire
+              {t("nav.inquire")}
             </button>
           </div>
         </div>
@@ -410,7 +425,7 @@ export default function HomePage() {
               transition={{ duration: 0.8 }}
               className="text-xs uppercase tracking-[0.2em] text-accent font-semibold"
             >
-              Aesthetic Sanctums
+              {t("hero.subtitle")}
             </motion.p>
             <motion.h1 
               initial={{ opacity: 0, y: 30 }}
@@ -418,8 +433,8 @@ export default function HomePage() {
               transition={{ duration: 1, delay: 0.1 }}
               className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-light text-primary leading-[1.05]"
             >
-              Curated <br />
-              <span className="serif-font italic font-light">Minimalist</span> Architecture
+              {t("hero.title1")} <br />
+              <span className="serif-font italic font-light">{t("hero.title2")}</span> {t("hero.title3")}
             </motion.h1>
           </div>
           
@@ -430,7 +445,7 @@ export default function HomePage() {
               transition={{ duration: 1, delay: 0.4 }}
               className="text-text-muted text-sm leading-relaxed"
             >
-              We believe in architecture as a silent poetry of space. Our portfolio represents a meticulous balance between raw materials, natural light, and the tropical landscapes of Bali.
+              {t("hero.description")}
             </motion.p>
             <motion.div 
               initial={{ scaleX: 0 }}
@@ -440,16 +455,16 @@ export default function HomePage() {
             />
             <div className="grid grid-cols-3 gap-4 text-[10px] sm:text-[11px] uppercase tracking-wider text-text-muted">
               <div>
-                <span className="block font-semibold text-primary">08</span>
-                <span>Leasehold Plots</span>
+                <span className="block font-semibold text-primary">{t("hero.stat1.value")}</span>
+                <span>{t("hero.stat1.label")}</span>
               </div>
               <div>
-                <span className="block font-semibold text-primary">01</span>
-                <span>Freehold Land</span>
+                <span className="block font-semibold text-primary">{t("hero.stat2.value")}</span>
+                <span>{t("hero.stat2.label")}</span>
               </div>
               <div>
-                <span className="block font-semibold text-primary">BALI</span>
-                <span>South Bali</span>
+                <span className="block font-semibold text-primary">{t("hero.stat3.value")}</span>
+                <span>{t("hero.stat3.label")}</span>
               </div>
             </div>
           </div>
@@ -463,7 +478,7 @@ export default function HomePage() {
           {/* Section title & Category toggle selectors */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10 md:mb-16">
             <div>
-              <p className="text-xs uppercase tracking-widest text-text-muted mb-2">Portfolio Curation</p>
+              <p className="text-xs uppercase tracking-widest text-text-muted mb-2">{t("explorer.subtitle")}</p>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
                 <button 
                   onClick={() => handleCategoryChange("lease")}
@@ -473,7 +488,7 @@ export default function HomePage() {
                       : "text-text-muted/40 hover:text-primary"
                   }`}
                 >
-                  Leasehold Plots
+                  {t("explorer.lease")}
                 </button>
                 <span className="text-xl sm:text-2xl md:text-3xl font-light text-text-muted/30">/</span>
                 <button 
@@ -484,7 +499,7 @@ export default function HomePage() {
                       : "text-text-muted/40 hover:text-primary"
                   }`}
                 >
-                  For Sale
+                  {t("explorer.sale")}
                 </button>
               </div>
             </div>
@@ -558,7 +573,7 @@ export default function HomePage() {
                   {/* Subtle Image Overlay on Hover */}
                   <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
                     <div className="bg-secondary/90 text-primary text-xs uppercase tracking-widest px-5 py-2.5 rounded-full shadow-md backdrop-blur-sm flex items-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 font-semibold">
-                      View Full Details <ArrowUpRight className="w-3.5 h-3.5" />
+                      {t("explorer.viewDetails")} <ArrowUpRight className="w-3.5 h-3.5" />
                     </div>
                   </div>
 
@@ -674,7 +689,7 @@ export default function HomePage() {
                       <Maximize className="w-4 h-4" />
                     </div>
                     <div className="min-w-0">
-                      <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">Total Land</span>
+                      <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">{t("spec.totalLand")}</span>
                       <span className="text-xs sm:text-sm font-semibold text-primary block truncate">{activeProperty.landArea}</span>
                     </div>
                   </div>
@@ -684,7 +699,7 @@ export default function HomePage() {
                       <Shield className="w-4 h-4" />
                     </div>
                     <div className="min-w-0">
-                      <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">Zoning</span>
+                      <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">{t("spec.zoning")}</span>
                       <span className="text-xs sm:text-sm font-semibold text-primary block truncate">{activeProperty.zoning}</span>
                     </div>
                   </div>
@@ -695,7 +710,7 @@ export default function HomePage() {
                         <Layers className="w-4 h-4" />
                       </div>
                       <div className="min-w-0">
-                        <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">Min Rental</span>
+                        <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">{t("spec.minRental")}</span>
                         <span className="text-xs sm:text-sm font-semibold text-primary block truncate">{activeProperty.minRental}</span>
                       </div>
                     </div>
@@ -707,7 +722,7 @@ export default function HomePage() {
                         <Clock className="w-4 h-4" />
                       </div>
                       <div className="min-w-0">
-                        <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">{activeProperty.type === "sale" ? "Status" : "Lease Term"}</span>
+                        <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">{activeProperty.type === "sale" ? t("spec.status") : t("spec.leaseTerm")}</span>
                         <span className="text-xs sm:text-sm font-semibold text-primary block truncate">{activeProperty.type === "sale" ? activeProperty.status : activeProperty.leaseTerm}</span>
                       </div>
                     </div>
@@ -718,7 +733,7 @@ export default function HomePage() {
                       <MapPin className="w-4 h-4" />
                     </div>
                     <div className="min-w-0">
-                      <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">Access</span>
+                      <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">{t("spec.access")}</span>
                       <span className="text-xs sm:text-sm font-semibold text-primary block truncate">{activeProperty.access}</span>
                     </div>
                   </div>
@@ -728,8 +743,8 @@ export default function HomePage() {
                       <Tag className="w-4 h-4" />
                     </div>
                     <div className="min-w-0">
-                      <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">Type</span>
-                      <span className="text-xs sm:text-sm font-semibold text-accent block truncate">{activeProperty.type === "sale" ? "Freehold (SHM)" : "Leasehold"}</span>
+                      <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">{t("spec.type")}</span>
+                      <span className="text-xs sm:text-sm font-semibold text-accent block truncate">{activeProperty.type === "sale" ? t("spec.freehold") : t("spec.leasehold")}</span>
                     </div>
                   </div>
                 </motion.div>
@@ -741,7 +756,7 @@ export default function HomePage() {
                   onClick={() => setIsInquiryOpen(true)}
                   className="flex-1 bg-accent text-secondary hover:bg-accent-hover text-xs uppercase tracking-widest py-4 px-6 rounded-xl font-semibold shadow-md transition-all duration-300 flex items-center justify-center gap-2 group text-center"
                 >
-                  {activeProperty.type === "sale" ? "Inquire Purchase Details" : "Inquire Lease Details"}
+                  {activeProperty.type === "sale" ? t("cta.inquirePurchase") : t("cta.inquireLease")}
                   <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </button>
                 
@@ -749,7 +764,7 @@ export default function HomePage() {
                   onClick={() => setIsGalleryOpen(true)}
                   className="bg-transparent border border-border-custom text-primary hover:border-text-muted text-xs uppercase tracking-widest py-4 px-6 rounded-xl font-medium transition-colors text-center"
                 >
-                  View Specifications
+                  {t("cta.viewSpecs")}
                 </button>
               </div>
 
@@ -763,12 +778,12 @@ export default function HomePage() {
       {/* --- PHILOSOPHY STATEMENT --- */}
       <section className="py-16 md:py-20 bg-card-bg/30 border-b border-border-custom">
         <div className="editorial-container max-w-4xl space-y-8 md:space-y-10 text-center">
-          <p className="text-xs uppercase tracking-[0.2em] text-accent font-semibold">Our Philosophy</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-accent font-semibold">{t("philosophy.subtitle")}</p>
           <h3 className="text-2xl sm:text-3xl md:text-5xl font-light text-primary leading-snug">
-            "Space is not defined by walls, but by the quiet voids left between them."
+            {t("philosophy.quote")}
           </h3>
           <p className="text-text-muted text-sm max-w-2xl mx-auto leading-relaxed">
-            SKY Property Bali acts as a boutique developer and broker focusing exclusively on properties with architectural integrity. We reject uniform developments in favor of organic textures, local materials, and space layouts that prioritize silence, airflow, and wellness.
+            {t("philosophy.description")}
           </p>
         </div>
       </section>
@@ -777,16 +792,16 @@ export default function HomePage() {
       <section className="py-12 border-b border-border-custom">
         <div className="editorial-container grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
           <div className="space-y-2">
-            <span className="text-xs uppercase tracking-widest text-accent font-semibold block">01 / Curated Portfolio</span>
-            <p className="text-xs text-text-muted">Every property in our index undergoes rigorous architectural and legal vetting.</p>
+            <span className="text-xs uppercase tracking-widest text-accent font-semibold block">{t("trust.1.title")}</span>
+            <p className="text-xs text-text-muted">{t("trust.1.desc")}</p>
           </div>
           <div className="space-y-2">
-            <span className="text-xs uppercase tracking-widest text-accent font-semibold block">02 / Seamless Transactions</span>
-            <p className="text-xs text-text-muted">Full notary support, legal frameworks for international ownership, and transparent escrows.</p>
+            <span className="text-xs uppercase tracking-widest text-accent font-semibold block">{t("trust.2.title")}</span>
+            <p className="text-xs text-text-muted">{t("trust.2.desc")}</p>
           </div>
           <div className="space-y-2">
-            <span className="text-xs uppercase tracking-widest text-accent font-semibold block">03 / Architecture Advisory</span>
-            <p className="text-xs text-text-muted">We collaborate with Bali's leading creative design studios to assist your renovation or builds.</p>
+            <span className="text-xs uppercase tracking-widest text-accent font-semibold block">{t("trust.3.title")}</span>
+            <p className="text-xs text-text-muted">{t("trust.3.desc")}</p>
           </div>
         </div>
       </section>
@@ -801,12 +816,12 @@ export default function HomePage() {
                 SKY PROPERTY <span className="font-light opacity-50">BALI</span>
               </span>
               <p className="text-xs text-secondary/60 leading-relaxed max-w-xs">
-                A high-fidelity curation of premium minimalist villas, design estates, and plot developments.
+                {t("footer.description")}
               </p>
             </div>
             
             <div>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold block mb-4">Locations</span>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold block mb-4">{t("footer.locations")}</span>
               <ul className="text-xs text-secondary/70 space-y-2">
                 <li>Uluwatu, Bali</li>
                 <li>Nusa Lembongan, Bali</li>
@@ -816,7 +831,7 @@ export default function HomePage() {
             </div>
 
             <div>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold block mb-4">Contact</span>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold block mb-4">{t("footer.contact")}</span>
               <ul className="text-xs text-secondary/70 space-y-2">
                 <li>inquire@skypropertybali.com</li>
                 <li>+62 812 3456 7890</li>
@@ -825,12 +840,12 @@ export default function HomePage() {
             </div>
 
             <div>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold block mb-4">Newsletter</span>
-              <p className="text-xs text-secondary/50 mb-3">Join our list for off-market villa offerings.</p>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold block mb-4">{t("footer.newsletter")}</span>
+              <p className="text-xs text-secondary/50 mb-3">{t("footer.newsletterDesc")}</p>
               <div className="flex border-b border-secondary/20 pb-2">
                 <input 
                   type="email" 
-                  placeholder="Your Email" 
+                  placeholder={t("footer.emailPlaceholder")} 
                   className="bg-transparent text-xs w-full text-secondary placeholder:text-secondary/40 focus:outline-none"
                 />
                 <button className="text-accent hover:text-accent-hover transition-colors">
@@ -842,11 +857,11 @@ export default function HomePage() {
           </div>
 
           <div className="border-t border-secondary/15 pt-8 flex flex-col md:flex-row items-center justify-between text-[11px] text-secondary/40">
-            <p>&copy; {new Date().getFullYear()} SKY Property Bali. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} {t("footer.copyright")}</p>
             <div className="flex gap-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-secondary/80">Privacy Policy</a>
-              <a href="#" className="hover:text-secondary/80">Terms of Service</a>
-              <a href="#" className="hover:text-secondary/80">Instagram</a>
+              <a href="#" className="hover:text-secondary/80">{t("footer.privacy")}</a>
+              <a href="#" className="hover:text-secondary/80">{t("footer.terms")}</a>
+              <a href="#" className="hover:text-secondary/80">{t("footer.instagram")}</a>
             </div>
           </div>
         </div>
@@ -875,7 +890,7 @@ export default function HomePage() {
             >
               {/* Header */}
               <div className="flex items-center justify-between mb-6 sm:mb-8 flex-shrink-0">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold">Direct Inquiry</span>
+                <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold">{t("inquiry.title")}</span>
                 <button 
                   onClick={() => setIsInquiryOpen(false)}
                   className="p-1 rounded-full hover:bg-card-bg text-primary transition-colors"
@@ -887,9 +902,9 @@ export default function HomePage() {
               {/* Scrollable Form Body */}
               <div className="flex-1 overflow-y-auto no-scrollbar space-y-6 pr-1 pb-6">
                 <div className="space-y-2">
-                  <h4 className="text-2xl sm:text-3xl font-light text-primary">Let's Connect</h4>
+                  <h4 className="text-2xl sm:text-3xl font-light text-primary">{t("inquiry.heading")}</h4>
                   <p className="text-xs text-text-muted leading-relaxed">
-                    Submit your interest details below. Our property adviser will follow up via email or phone within 12 hours.
+                    {t("inquiry.description")}
                   </p>
                 </div>
 
@@ -902,39 +917,39 @@ export default function HomePage() {
                     <div className="w-12 h-12 rounded-full bg-accent/15 text-accent flex items-center justify-center mx-auto">
                       <Check className="w-6 h-6" />
                     </div>
-                    <h5 className="text-lg font-medium text-primary">Inquiry Sent</h5>
+                    <h5 className="text-lg font-medium text-primary">{t("inquiry.sent")}</h5>
                     <p className="text-xs text-text-muted">
-                      Thank you. We have registered your inquiry for <strong className="text-primary">{activeProperty.title}</strong>.
+                      {t("inquiry.sentDesc")} <strong className="text-primary">{activeProperty.title}</strong>.
                     </p>
                   </motion.div>
                 ) : (
                   <form onSubmit={handleInquirySubmit} className="space-y-4">
                     <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-text-muted block">Full Name</label>
+                      <label className="text-[10px] uppercase tracking-widest text-text-muted block">{t("inquiry.name")}</label>
                       <input 
                         type="text" 
                         required
                         value={inquiryName}
                         onChange={(e) => setInquiryName(e.target.value)}
-                        placeholder="John Doe" 
+                        placeholder={t("inquiry.namePlaceholder")} 
                         className="w-full bg-card-bg/60 border border-border-custom rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all text-primary placeholder:text-text-muted/40"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-text-muted block">Email Address</label>
+                      <label className="text-[10px] uppercase tracking-widest text-text-muted block">{t("inquiry.email")}</label>
                       <input 
                         type="email" 
                         required
                         value={inquiryEmail}
                         onChange={(e) => setInquiryEmail(e.target.value)}
-                        placeholder="john@example.com" 
+                        placeholder={t("inquiry.emailPlaceholder")} 
                         className="w-full bg-card-bg/60 border border-border-custom rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all text-primary placeholder:text-text-muted/40"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-text-muted block">Selected Property</label>
+                      <label className="text-[10px] uppercase tracking-widest text-text-muted block">{t("inquiry.selectedProperty")}</label>
                       <div className="w-full bg-card-bg border border-border-custom rounded-xl px-4 py-3 text-sm flex justify-between items-center text-primary">
                         <span className="font-semibold text-xs truncate max-w-[150px]">{activeProperty.title}</span>
                         <span className="text-xs text-accent font-medium">{activeProperty.price}</span>
@@ -942,7 +957,7 @@ export default function HomePage() {
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-text-muted block">Message</label>
+                      <label className="text-[10px] uppercase tracking-widest text-text-muted block">{t("inquiry.message")}</label>
                       <textarea 
                         rows={4}
                         required
@@ -956,7 +971,7 @@ export default function HomePage() {
                       type="submit"
                       className="w-full bg-accent text-secondary hover:bg-accent-hover text-xs uppercase tracking-widest py-4 rounded-xl font-semibold shadow-md transition-colors duration-300 mt-2"
                     >
-                      Submit Inquiry
+                      {t("inquiry.submit")}
                     </button>
                   </form>
                 )}
@@ -964,7 +979,7 @@ export default function HomePage() {
 
               {/* Footer */}
               <div className="text-[10px] text-text-muted border-t border-border-custom pt-4 sm:pt-6 flex items-center justify-between flex-shrink-0">
-                <span>WhatsApp Hotline</span>
+                <span>{t("inquiry.whatsapp")}</span>
                 <span className="font-semibold text-primary">+62 812 3456 7890</span>
               </div>
             </motion.div>
@@ -992,7 +1007,7 @@ export default function HomePage() {
                 onClick={() => setIsGalleryOpen(false)}
                 className="flex items-center gap-2 text-xs uppercase tracking-widest text-secondary/60 hover:text-secondary transition-colors group flex-shrink-0 ml-4"
               >
-                <span>Close</span>
+                <span>{t("lightbox.close")}</span>
                 <X className="w-4 h-4 transform group-hover:rotate-90 transition-transform duration-300" />
               </button>
             </div>
@@ -1060,74 +1075,74 @@ export default function HomePage() {
                 <div className="flex items-center justify-between text-[11px] sm:text-xs text-secondary/50">
                   <span>
                     {activeProperty.images.length > 1
-                      ? `Photo ${activeImageIndex + 1} of ${activeProperty.images.length} — Scroll to review specs`
-                      : "Scroll to review technical specifications"}
+                      ? `Photo ${activeImageIndex + 1} / ${activeProperty.images.length} — ${t("lightbox.scrollSpecs")}`
+                      : t("lightbox.scrollSpecs")}
                   </span>
-                  <span>Price: <strong className="text-accent">{activeProperty.price}</strong></span>
+                  <span>{t("lightbox.price")}: <strong className="text-accent">{activeProperty.price}</strong></span>
                 </div>
               </div>
 
               {/* Specs and Bullet points */}
               <div className="lg:col-span-5 space-y-6 sm:space-y-8">
                 <div className="space-y-4">
-                  <span className="text-xs uppercase tracking-widest text-accent font-semibold">Property Spec Sheet</span>
-                  <h3 className="text-3xl sm:text-4xl font-light text-secondary">Land Specifications</h3>
+                  <span className="text-xs uppercase tracking-widest text-accent font-semibold">{t("lightbox.specSheet")}</span>
+                  <h3 className="text-3xl sm:text-4xl font-light text-secondary">{t("lightbox.landSpecs")}</h3>
                   <p className="text-secondary/70 text-sm leading-relaxed">
-                    Comprehensive property details including zoning, access, lease terms, and surrounding landmarks for informed investment decisions.
+                    {t("lightbox.specsDesc")}
                   </p>
                 </div>
 
                 {/* Table details - Dynamic based on type */}
                 <div className="border-t border-secondary/10 divide-y divide-secondary/10 text-xs sm:text-sm">
                   <div className="py-3 flex justify-between">
-                    <span className="text-secondary/50 font-light">Location</span>
+                    <span className="text-secondary/50 font-light">{t("lightbox.location")}</span>
                     <span className="font-medium text-secondary">{activeProperty.location}</span>
                   </div>
                   <div className="py-3 flex justify-between">
-                    <span className="text-secondary/50 font-light">Land Area</span>
+                    <span className="text-secondary/50 font-light">{t("lightbox.landArea")}</span>
                     <span className="font-medium text-secondary">{activeProperty.landArea}</span>
                   </div>
                   <div className="py-3 flex justify-between">
-                    <span className="text-secondary/50 font-light">Zoning</span>
+                    <span className="text-secondary/50 font-light">{t("lightbox.zoning")}</span>
                     <span className="font-medium text-secondary">{activeProperty.zoning}</span>
                   </div>
                   {activeProperty.leaseTerm && (
                     <div className="py-3 flex justify-between">
-                      <span className="text-secondary/50 font-light">{activeProperty.type === "sale" ? "Ownership" : "Lease Term"}</span>
+                      <span className="text-secondary/50 font-light">{activeProperty.type === "sale" ? t("lightbox.ownership") : t("lightbox.leaseTerm")}</span>
                       <span className="font-medium text-secondary">{activeProperty.type === "sale" ? activeProperty.status : activeProperty.leaseTerm}</span>
                     </div>
                   )}
                   {activeProperty.minRental && (
                     <div className="py-3 flex justify-between">
-                      <span className="text-secondary/50 font-light">Min Rental</span>
+                      <span className="text-secondary/50 font-light">{t("lightbox.minRental")}</span>
                       <span className="font-medium text-secondary">{activeProperty.minRental}</span>
                     </div>
                   )}
                   <div className="py-3 flex justify-between">
-                    <span className="text-secondary/50 font-light">Access</span>
+                    <span className="text-secondary/50 font-light">{t("lightbox.access")}</span>
                     <span className="font-medium text-secondary">{activeProperty.access}</span>
                   </div>
                   {activeProperty.view && (
                     <div className="py-3 flex justify-between">
-                      <span className="text-secondary/50 font-light">View</span>
+                      <span className="text-secondary/50 font-light">{t("lightbox.view")}</span>
                       <span className="font-medium text-secondary">{activeProperty.view}</span>
                     </div>
                   )}
                   {activeProperty.frontage && (
                     <div className="py-3 flex justify-between">
-                      <span className="text-secondary/50 font-light">Frontage</span>
+                      <span className="text-secondary/50 font-light">{t("lightbox.frontage")}</span>
                       <span className="font-medium text-secondary">{activeProperty.frontage}</span>
                     </div>
                   )}
                   <div className="py-3 flex justify-between">
-                    <span className="text-secondary/50 font-light">Status</span>
-                    <span className="font-medium text-accent">{activeProperty.type === "sale" ? "Freehold (SHM)" : "Leasehold"}</span>
+                    <span className="text-secondary/50 font-light">{t("lightbox.status")}</span>
+                    <span className="font-medium text-accent">{activeProperty.type === "sale" ? t("spec.freehold") : t("spec.leasehold")}</span>
                   </div>
                 </div>
 
                 {/* Additional bullet specifics */}
                 <div className="space-y-3">
-                  <span className="text-[10px] uppercase tracking-widest text-secondary/40 block">Key Features</span>
+                  <span className="text-[10px] uppercase tracking-widest text-secondary/40 block">{t("lightbox.keyFeatures")}</span>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-secondary/80">
                     {activeProperty.details.map((detail, index) => (
                       <li key={index} className="flex items-center gap-2.5">
@@ -1146,7 +1161,7 @@ export default function HomePage() {
                     }}
                     className="w-full bg-accent hover:bg-accent-hover text-secondary text-xs uppercase tracking-widest py-4 rounded-xl font-semibold shadow-md transition-colors"
                   >
-                    Inquire About This Property
+                    {t("lightbox.inquireProperty")}
                   </button>
                 </div>
               </div>
@@ -1165,7 +1180,7 @@ export default function HomePage() {
                   }}
                   className="hover:text-secondary flex items-center gap-1 transition-colors"
                 >
-                  <ChevronLeft className="w-4 h-4" /> Prev
+                  <ChevronLeft className="w-4 h-4" /> {t("lightbox.prev")}
                 </button>
                 <span>|</span>
                 <button 
@@ -1176,7 +1191,7 @@ export default function HomePage() {
                   }}
                   className="hover:text-secondary flex items-center gap-1 transition-colors"
                 >
-                  Next <ChevronRight className="w-4 h-4" />
+                  {t("lightbox.next")} <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
