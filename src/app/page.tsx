@@ -14,7 +14,9 @@ import {
   Clock,
   Shield,
   Tag,
-  Globe
+  Globe,
+  MessageCircle,
+  Phone
 } from "lucide-react";
 import { translations, type Language } from "./translations";
 
@@ -310,19 +312,10 @@ export default function HomePage() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  
-  // Form States
-  const [inquiryName, setInquiryName] = useState("");
-  const [inquiryEmail, setInquiryEmail] = useState("");
-  const [inquiryMessage, setInquiryMessage] = useState(
-    `I am interested in ${activeProperty.title} (${activeProperty.location}). Please provide more details.`
-  );
-  const [inquirySubmitted, setInquirySubmitted] = useState(false);
 
   const handlePropertyChange = (property: Property) => {
     setActiveProperty(property);
     setActiveImageIndex(0);
-    setInquiryMessage(`I am interested in ${property.title} (${property.location}). Please provide more details.`);
   };
 
   const handlePrevImage = useCallback((e?: React.MouseEvent) => {
@@ -344,23 +337,14 @@ export default function HomePage() {
     const propertiesOfCategory = PROPERTIES.filter((p) => p.type === category);
     setActiveProperty(propertiesOfCategory[0]);
     setActiveImageIndex(0);
-    setInquiryMessage(
-      `I am interested in ${propertiesOfCategory[0].title} (${propertiesOfCategory[0].location}). Please provide more details.`
-    );
   };
 
-  const handleInquirySubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inquiryName || !inquiryEmail) return;
-    
-    // Simulate API request
-    setInquirySubmitted(true);
-    setTimeout(() => {
-      setInquirySubmitted(false);
-      setIsInquiryOpen(false);
-      setInquiryName("");
-      setInquiryEmail("");
-    }, 3000);
+  const handleWhatsApp = (number: string) => {
+    const message = encodeURIComponent(
+      `Hi, I am interested in ${activeProperty.title} (${activeProperty.location}). Please provide more details.`
+    );
+    window.open(`https://wa.me/${number}?text=${message}`, "_blank");
+    setIsInquiryOpen(false);
   };
 
   return (
@@ -818,7 +802,7 @@ export default function HomePage() {
               <p className="text-xs text-secondary/60 leading-relaxed max-w-xs">
                 {t("footer.description")}
               </p>
-            </div>
+            </div>    
             
             <div>
               <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold block mb-4">{t("footer.locations")}</span>
@@ -832,9 +816,19 @@ export default function HomePage() {
 
             <div>
               <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold block mb-4">{t("footer.contact")}</span>
-              <ul className="text-xs text-secondary/70 space-y-2">
-                <li>inquire@skypropertybali.com</li>
-                <li>+62 812 3456 7890</li>
+              <ul className="text-xs text-secondary/70 space-y-3">
+                <li>
+                  <a href="https://wa.me/6281339900044" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-secondary transition-colors">
+                    <MessageCircle className="w-3.5 h-3.5 text-accent" />
+                    <span>Man — +62 813 3990 0044</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://wa.me/6281353306674" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-secondary transition-colors">
+                    <MessageCircle className="w-3.5 h-3.5 text-accent" />
+                    <span>Gina — +62 813 5330 6674</span>
+                  </a>
+                </li>
                 <li>Jalan Pantai Bingin, Uluwatu, Bali</li>
               </ul>
             </div>
@@ -858,16 +852,18 @@ export default function HomePage() {
 
           <div className="border-t border-secondary/15 pt-8 flex flex-col md:flex-row items-center justify-between text-[11px] text-secondary/40">
             <p>&copy; {new Date().getFullYear()} {t("footer.copyright")}</p>
-            <div className="flex gap-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-secondary/80">{t("footer.privacy")}</a>
-              <a href="#" className="hover:text-secondary/80">{t("footer.terms")}</a>
-              <a href="#" className="hover:text-secondary/80">{t("footer.instagram")}</a>
+            <div className="flex flex-wrap gap-x-6 gap-y-2 mt-4 md:mt-0 justify-center md:justify-end">
+              <a href="#" className="hover:text-secondary/80 transition-colors">{t("footer.privacy")}</a>
+              <a href="#" className="hover:text-secondary/80 transition-colors">{t("footer.terms")}</a>
+              <a href="#" className="hover:text-secondary/80 transition-colors">{t("footer.instagram")}</a>
+              <a href="https://tiktok.com/@gin4b4li" target="_blank" rel="noopener noreferrer" className="hover:text-secondary/80 transition-colors">TikTok @gin4b4li</a>
+              <a href="https://tiktok.com/@richtransportbali" target="_blank" rel="noopener noreferrer" className="hover:text-secondary/80 transition-colors">TikTok @richtransportbali</a>
             </div>
           </div>
         </div>
       </footer>
 
-      {/* --- INQUIRY DRAWERS / SLIDE-OVER MODALS --- */}
+      {/* --- WHATSAPP CONTACT CHOOSER MODAL --- */}
       <AnimatePresence>
         {isInquiryOpen && (
           <>
@@ -880,107 +876,79 @@ export default function HomePage() {
               className="fixed inset-0 z-50 bg-primary/40 backdrop-blur-sm"
             />
             
-            {/* Slide-over Content */}
+            {/* Centered Modal */}
             <motion.div 
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-md bg-secondary border-l border-border-custom shadow-2xl p-6 sm:p-8 md:p-10 flex flex-col justify-between"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
             >
-              {/* Header */}
-              <div className="flex items-center justify-between mb-6 sm:mb-8 flex-shrink-0">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold">{t("inquiry.title")}</span>
-                <button 
-                  onClick={() => setIsInquiryOpen(false)}
-                  className="p-1 rounded-full hover:bg-card-bg text-primary transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Scrollable Form Body */}
-              <div className="flex-1 overflow-y-auto no-scrollbar space-y-6 pr-1 pb-6">
-                <div className="space-y-2">
-                  <h4 className="text-2xl sm:text-3xl font-light text-primary">{t("inquiry.heading")}</h4>
-                  <p className="text-xs text-text-muted leading-relaxed">
-                    {t("inquiry.description")}
-                  </p>
+              <div className="bg-secondary border border-border-custom rounded-2xl shadow-2xl w-full max-w-sm pointer-events-auto overflow-hidden">
+                
+                {/* Header */}
+                <div className="p-6 pb-4 flex items-center justify-between">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold">{t("inquiry.title")}</span>
+                  <button 
+                    onClick={() => setIsInquiryOpen(false)}
+                    className="p-1 rounded-full hover:bg-card-bg text-primary transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
 
-                {inquirySubmitted ? (
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="bg-card-bg border border-accent/20 p-6 rounded-xl text-center space-y-4 py-12"
+                {/* Property Info */}
+                <div className="px-6 pb-4">
+                  <div className="bg-card-bg/60 border border-border-custom rounded-xl p-4 flex justify-between items-center">
+                    <div className="min-w-0">
+                      <span className="text-xs text-text-muted block">{t("inquiry.selectedProperty")}</span>
+                      <span className="text-sm font-semibold text-primary block truncate">{activeProperty.title}</span>
+                    </div>
+                    <span className="text-xs text-accent font-medium whitespace-nowrap ml-3">{activeProperty.price}</span>
+                  </div>
+                </div>
+
+                {/* Heading */}
+                <div className="px-6 pb-2 space-y-1">
+                  <h4 className="text-xl sm:text-2xl font-light text-primary">{t("inquiry.heading")}</h4>
+                  <p className="text-xs text-text-muted leading-relaxed">{t("inquiry.description")}</p>
+                </div>
+
+                {/* WhatsApp Contact Buttons */}
+                <div className="p-6 pt-4 space-y-3">
+                  <button
+                    onClick={() => handleWhatsApp("6281339900044")}
+                    className="w-full flex items-center gap-4 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 hover:border-[#25D366]/50 rounded-xl px-5 py-4 transition-all duration-300 group"
                   >
-                    <div className="w-12 h-12 rounded-full bg-accent/15 text-accent flex items-center justify-center mx-auto">
-                      <Check className="w-6 h-6" />
+                    <div className="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center flex-shrink-0 shadow-sm">
+                      <MessageCircle className="w-5 h-5 text-white" />
                     </div>
-                    <h5 className="text-lg font-medium text-primary">{t("inquiry.sent")}</h5>
-                    <p className="text-xs text-text-muted">
-                      {t("inquiry.sentDesc")} <strong className="text-primary">{activeProperty.title}</strong>.
-                    </p>
-                  </motion.div>
-                ) : (
-                  <form onSubmit={handleInquirySubmit} className="space-y-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-text-muted block">{t("inquiry.name")}</label>
-                      <input 
-                        type="text" 
-                        required
-                        value={inquiryName}
-                        onChange={(e) => setInquiryName(e.target.value)}
-                        placeholder={t("inquiry.namePlaceholder")} 
-                        className="w-full bg-card-bg/60 border border-border-custom rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all text-primary placeholder:text-text-muted/40"
-                      />
+                    <div className="text-left min-w-0">
+                      <span className="text-sm font-semibold text-primary block">Man</span>
+                      <span className="text-xs text-text-muted">+62 813 3990 0044</span>
                     </div>
+                    <ArrowUpRight className="w-4 h-4 text-text-muted group-hover:text-[#25D366] ml-auto flex-shrink-0 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                  </button>
 
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-text-muted block">{t("inquiry.email")}</label>
-                      <input 
-                        type="email" 
-                        required
-                        value={inquiryEmail}
-                        onChange={(e) => setInquiryEmail(e.target.value)}
-                        placeholder={t("inquiry.emailPlaceholder")} 
-                        className="w-full bg-card-bg/60 border border-border-custom rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all text-primary placeholder:text-text-muted/40"
-                      />
+                  <button
+                    onClick={() => handleWhatsApp("6281353306674")}
+                    className="w-full flex items-center gap-4 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 hover:border-[#25D366]/50 rounded-xl px-5 py-4 transition-all duration-300 group"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center flex-shrink-0 shadow-sm">
+                      <MessageCircle className="w-5 h-5 text-white" />
                     </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-text-muted block">{t("inquiry.selectedProperty")}</label>
-                      <div className="w-full bg-card-bg border border-border-custom rounded-xl px-4 py-3 text-sm flex justify-between items-center text-primary">
-                        <span className="font-semibold text-xs truncate max-w-[150px]">{activeProperty.title}</span>
-                        <span className="text-xs text-accent font-medium">{activeProperty.price}</span>
-                      </div>
+                    <div className="text-left min-w-0">
+                      <span className="text-sm font-semibold text-primary block">Gina</span>
+                      <span className="text-xs text-text-muted">+62 813 5330 6674</span>
                     </div>
+                    <ArrowUpRight className="w-4 h-4 text-text-muted group-hover:text-[#25D366] ml-auto flex-shrink-0 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                  </button>
+                </div>
 
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] uppercase tracking-widest text-text-muted block">{t("inquiry.message")}</label>
-                      <textarea 
-                        rows={4}
-                        required
-                        value={inquiryMessage}
-                        onChange={(e) => setInquiryMessage(e.target.value)}
-                        className="w-full bg-card-bg/60 border border-border-custom rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all text-primary placeholder:text-text-muted/40 resize-none"
-                      />
-                    </div>
-
-                    <button 
-                      type="submit"
-                      className="w-full bg-accent text-secondary hover:bg-accent-hover text-xs uppercase tracking-widest py-4 rounded-xl font-semibold shadow-md transition-colors duration-300 mt-2"
-                    >
-                      {t("inquiry.submit")}
-                    </button>
-                  </form>
-                )}
-              </div>
-
-              {/* Footer */}
-              <div className="text-[10px] text-text-muted border-t border-border-custom pt-4 sm:pt-6 flex items-center justify-between flex-shrink-0">
-                <span>{t("inquiry.whatsapp")}</span>
-                <span className="font-semibold text-primary">+62 812 3456 7890</span>
+                {/* Footer */}
+                <div className="px-6 pb-6">
+                  <p className="text-[10px] text-text-muted text-center">{t("inquiry.whatsappNote")}</p>
+                </div>
               </div>
             </motion.div>
           </>
@@ -1199,6 +1167,32 @@ export default function HomePage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* --- FLOATING WHATSAPP BUTTON --- */}
+      <a
+        href="https://wa.me/6281353306674"
+        target="_blank"
+        rel="noopener noreferrer"
+        id="whatsapp-fab"
+        aria-label="Chat on WhatsApp"
+        className="fixed bottom-6 right-6 z-40 group"
+      >
+        {/* Pulse ring animation */}
+        <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-25" />
+        
+        {/* Button */}
+        <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#25D366] hover:bg-[#1DA851] shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110">
+          <svg viewBox="0 0 32 32" className="w-7 h-7 sm:w-8 sm:h-8 fill-white">
+            <path d="M16.004 0h-.008C7.174 0 0 7.176 0 16c0 3.5 1.128 6.744 3.046 9.378L1.054 31.29l6.118-1.958A15.914 15.914 0 0016.004 32C24.826 32 32 24.822 32 16S24.826 0 16.004 0zm9.312 22.594c-.39 1.1-1.932 2.014-3.168 2.28-.846.18-1.95.324-5.67-1.218-4.762-1.972-7.828-6.81-8.066-7.126-.23-.316-1.904-2.536-1.904-4.836s1.204-3.432 1.632-3.902c.39-.428.914-.612 1.218-.612.152 0 .29.008.414.014.428.018.642.044.924.716.352.838 1.21 2.95 1.316 3.164.108.214.214.498.076.784-.13.29-.244.47-.458.72-.214.252-.418.444-.632.716-.196.236-.418.49-.176.918.242.428 1.078 1.778 2.314 2.88 1.59 1.416 2.93 1.856 3.344 2.062.414.206.656.176.898-.108.248-.29 1.058-1.232 1.34-1.656.276-.424.558-.352.938-.214.384.136 2.434 1.148 2.852 1.356.418.21.696.316.798.49.1.176.1 1.012-.29 2.112z"/>
+          </svg>
+        </div>
+
+        {/* Tooltip */}
+        <div className="absolute bottom-full right-0 mb-3 px-3 py-1.5 bg-primary text-secondary text-xs rounded-lg shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-300 pointer-events-none">
+          Chat with Gina
+          <div className="absolute top-full right-5 w-2 h-2 bg-primary rotate-45 -mt-1" />
+        </div>
+      </a>
 
     </div>
   );

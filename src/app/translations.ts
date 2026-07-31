@@ -69,19 +69,11 @@ export const translations: Record<Language, Record<string, string>> = {
     "footer.instagram": "Instagram",
 
     // Inquiry modal
-    "inquiry.title": "Direct Inquiry",
-    "inquiry.heading": "Let's Connect",
-    "inquiry.description": "Submit your interest details below. Our property adviser will follow up via email or phone within 12 hours.",
-    "inquiry.name": "Full Name",
-    "inquiry.namePlaceholder": "John Doe",
-    "inquiry.email": "Email Address",
-    "inquiry.emailPlaceholder": "john@example.com",
+    "inquiry.title": "WhatsApp Us",
+    "inquiry.heading": "Chat With Our Team",
+    "inquiry.description": "Choose a contact below to start a WhatsApp conversation about this property.",
     "inquiry.selectedProperty": "Selected Property",
-    "inquiry.message": "Message",
-    "inquiry.submit": "Submit Inquiry",
-    "inquiry.sent": "Inquiry Sent",
-    "inquiry.sentDesc": "Thank you. We have registered your inquiry for",
-    "inquiry.whatsapp": "WhatsApp Hotline",
+    "inquiry.whatsappNote": "You will be redirected to WhatsApp with a pre-filled message about this property.",
 
     // Lightbox
     "lightbox.close": "Close",
@@ -176,19 +168,11 @@ export const translations: Record<Language, Record<string, string>> = {
     "footer.instagram": "Instagram",
 
     // Inquiry modal
-    "inquiry.title": "Pertanyaan Langsung",
-    "inquiry.heading": "Mari Terhubung",
-    "inquiry.description": "Kirimkan detail minat Anda di bawah ini. Penasihat properti kami akan menindaklanjuti melalui email atau telepon dalam 12 jam.",
-    "inquiry.name": "Nama Lengkap",
-    "inquiry.namePlaceholder": "John Doe",
-    "inquiry.email": "Alamat Email",
-    "inquiry.emailPlaceholder": "john@contoh.com",
+    "inquiry.title": "WhatsApp Kami",
+    "inquiry.heading": "Chat Dengan Tim Kami",
+    "inquiry.description": "Pilih kontak di bawah untuk memulai percakapan WhatsApp tentang properti ini.",
     "inquiry.selectedProperty": "Properti Terpilih",
-    "inquiry.message": "Pesan",
-    "inquiry.submit": "Kirim Pertanyaan",
-    "inquiry.sent": "Pertanyaan Terkirim",
-    "inquiry.sentDesc": "Terima kasih. Kami telah mendaftarkan pertanyaan Anda untuk",
-    "inquiry.whatsapp": "Hotline WhatsApp",
+    "inquiry.whatsappNote": "Anda akan dialihkan ke WhatsApp dengan pesan otomatis tentang properti ini.",
 
     // Lightbox
     "lightbox.close": "Tutup",
