@@ -2,11 +2,11 @@
 
 import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Maximize, 
-  MapPin, 
-  ArrowUpRight, 
-  X, 
+import {
+  Maximize,
+  MapPin,
+  ArrowUpRight,
+  X,
   Check,
   ChevronRight,
   Layers,
@@ -31,7 +31,7 @@ interface Property {
   images: string[];
   description: string;
   details: string[];
-  
+
   // Land specs
   landArea: string;
   zoning?: string;
@@ -300,15 +300,15 @@ const PROPERTIES: Property[] = [
 export default function HomePage() {
   const [language, setLanguage] = useState<Language>("en");
   const t = (key: string) => translations[language][key] || key;
-  
+
   const [activeCategory, setActiveCategory] = useState<"lease" | "sale">("lease");
-  
+
   // Filter properties based on the selected category
   const filteredProperties = PROPERTIES.filter((p) => p.type === activeCategory);
-  
+
   // Active property state initialized to the first item of the active category
   const [activeProperty, setActiveProperty] = useState<Property>(filteredProperties[0]);
-  
+
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -349,15 +349,15 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-secondary text-primary selection:bg-accent selection:text-secondary font-sans transition-colors duration-500">
-      
+
       {/* --- ELEGANT HEADER --- */}
       <header className="sticky top-0 z-40 backdrop-blur-md bg-secondary/80 border-b border-border-custom transition-all duration-300">
         <div className="editorial-container py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden border border-border-custom bg-card-bg">
-              <img 
-                src="/assets/logo.jpeg" 
-                alt="Sky Property Logo" 
+              <img
+                src="/assets/logo.jpeg"
+                alt="Sky Property Logo"
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
@@ -368,7 +368,7 @@ export default function HomePage() {
               SKY PROPERTY <span className="font-light text-text-muted">BALI</span>
             </span>
           </div>
-          
+
           <nav className="hidden md:flex items-center gap-10 text-xs uppercase tracking-widest text-text-muted">
             <a href="#villas" className="hover:text-primary transition-colors duration-200">{t("nav.portfolio")}</a>
             <a href="#philosophy" className="hover:text-primary transition-colors duration-200">{t("nav.philosophy")}</a>
@@ -377,7 +377,7 @@ export default function HomePage() {
               setIsInquiryOpen(true);
             }}>{t("nav.contact")}</a>
           </nav>
-          
+
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Language Toggle */}
             <button
@@ -389,7 +389,7 @@ export default function HomePage() {
               <Globe className="w-3.5 h-3.5" />
               <span>{t("lang.switch")}</span>
             </button>
-            <button 
+            <button
               onClick={() => setIsInquiryOpen(true)}
               className="bg-accent text-secondary text-[10px] sm:text-xs uppercase tracking-widest px-4 sm:px-5 py-2 sm:py-2.5 rounded-full hover:bg-accent-hover transition-all duration-300 font-semibold shadow-sm"
             >
@@ -403,7 +403,7 @@ export default function HomePage() {
       <section className="py-16 md:py-32 border-b border-border-custom relative overflow-hidden" id="philosophy">
         <div className="editorial-container grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
           <div className="lg:col-span-8 space-y-6">
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
@@ -411,7 +411,7 @@ export default function HomePage() {
             >
               {t("hero.subtitle")}
             </motion.p>
-            <motion.h1 
+            <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.1 }}
@@ -421,9 +421,9 @@ export default function HomePage() {
               <span className="serif-font italic font-light">{t("hero.title2")}</span> {t("hero.title3")}
             </motion.h1>
           </div>
-          
+
           <div className="lg:col-span-4 lg:pl-10 space-y-4">
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 0.4 }}
@@ -431,7 +431,7 @@ export default function HomePage() {
             >
               {t("hero.description")}
             </motion.p>
-            <motion.div 
+            <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 1, delay: 0.5 }}
@@ -458,47 +458,44 @@ export default function HomePage() {
       {/* --- VILLA & LAND EXPLORER / INTERACTIVE SPEC SHEET --- */}
       <section className="py-12 md:py-24 border-b border-border-custom" id="villas">
         <div className="editorial-container">
-          
+
           {/* Section title & Category toggle selectors */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-10 md:mb-16">
             <div>
               <p className="text-xs uppercase tracking-widest text-text-muted mb-2">{t("explorer.subtitle")}</p>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                <button 
+                <button
                   onClick={() => handleCategoryChange("lease")}
-                  className={`text-2xl sm:text-3xl md:text-4xl font-light text-left transition-all ${
-                    activeCategory === "lease"
-                      ? "text-primary border-b border-accent pb-1"
-                      : "text-text-muted/40 hover:text-primary"
-                  }`}
+                  className={`text-2xl sm:text-3xl md:text-4xl font-light text-left transition-all ${activeCategory === "lease"
+                    ? "text-primary border-b border-accent pb-1"
+                    : "text-text-muted/40 hover:text-primary"
+                    }`}
                 >
                   {t("explorer.lease")}
                 </button>
                 <span className="text-xl sm:text-2xl md:text-3xl font-light text-text-muted/30">/</span>
-                <button 
+                <button
                   onClick={() => handleCategoryChange("sale")}
-                  className={`text-2xl sm:text-3xl md:text-4xl font-light text-left transition-all ${
-                    activeCategory === "sale"
-                      ? "text-primary border-b border-accent pb-1"
-                      : "text-text-muted/40 hover:text-primary"
-                  }`}
+                  className={`text-2xl sm:text-3xl md:text-4xl font-light text-left transition-all ${activeCategory === "sale"
+                    ? "text-primary border-b border-accent pb-1"
+                    : "text-text-muted/40 hover:text-primary"
+                    }`}
                 >
                   {t("explorer.sale")}
                 </button>
               </div>
             </div>
-            
+
             {/* Quick tab navigation within active category */}
             <div className="flex flex-wrap gap-2 md:gap-3">
               {filteredProperties.map((property) => (
                 <button
                   key={property.id}
                   onClick={() => handlePropertyChange(property)}
-                  className={`text-[10px] sm:text-xs uppercase tracking-widest px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border transition-all duration-300 ${
-                    activeProperty.id === property.id
-                      ? "bg-primary text-secondary border-primary font-semibold"
-                      : "bg-transparent text-text-muted border-border-custom hover:text-primary hover:border-text-muted"
-                  }`}
+                  className={`text-[10px] sm:text-xs uppercase tracking-widest px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border transition-all duration-300 ${activeProperty.id === property.id
+                    ? "bg-primary text-secondary border-primary font-semibold"
+                    : "bg-transparent text-text-muted border-border-custom hover:text-primary hover:border-text-muted"
+                    }`}
                 >
                   {property.title}
                 </button>
@@ -508,13 +505,13 @@ export default function HomePage() {
 
           {/* Main Visualizer Panel */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-            
+
             {/* LEFT COLUMN: Large Zoomable Image (7 cols) */}
             <div className="lg:col-span-7">
               <div className="space-y-4">
-                
+
                 {/* Image Container with motion transition */}
-                <div 
+                <div
                   className="aspect-[4/3] md:aspect-[16/10] bg-card-bg rounded-2xl overflow-hidden border border-border-custom relative cursor-zoom-in group shadow-sm"
                   onClick={() => setIsGalleryOpen(true)}
                 >
@@ -533,7 +530,7 @@ export default function HomePage() {
                       }}
                     />
                   </AnimatePresence>
-                  
+
                   {/* Gallery navigation arrows (only show if multiple images) */}
                   {activeProperty.images.length > 1 && (
                     <>
@@ -575,11 +572,10 @@ export default function HomePage() {
                               e.stopPropagation();
                               setActiveImageIndex(idx);
                             }}
-                            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                              idx === activeImageIndex
-                                ? "bg-accent scale-125"
-                                : "bg-secondary/60 hover:bg-secondary/90"
-                            }`}
+                            className={`w-2 h-2 rounded-full transition-all duration-300 ${idx === activeImageIndex
+                              ? "bg-accent scale-125"
+                              : "bg-secondary/60 hover:bg-secondary/90"
+                              }`}
                             aria-label={`View photo ${idx + 1}`}
                           />
                         ))}
@@ -594,15 +590,14 @@ export default function HomePage() {
                     <button
                       key={`${activeProperty.id}-img-${idx}`}
                       onClick={() => setActiveImageIndex(idx)}
-                      className={`relative w-16 sm:w-24 aspect-[4/3] rounded-lg overflow-hidden border transition-all duration-300 ${
-                        idx === activeImageIndex
-                          ? "border-accent ring-1 ring-accent"
-                          : "border-border-custom hover:border-text-muted"
-                      }`}
+                      className={`relative w-16 sm:w-24 aspect-[4/3] rounded-lg overflow-hidden border transition-all duration-300 ${idx === activeImageIndex
+                        ? "border-accent ring-1 ring-accent"
+                        : "border-border-custom hover:border-text-muted"
+                        }`}
                     >
-                      <img 
-                        src={img} 
-                        alt={`${activeProperty.title} - Photo ${idx + 1}`} 
+                      <img
+                        src={img}
+                        alt={`${activeProperty.title} - Photo ${idx + 1}`}
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           e.currentTarget.src = `https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=300&auto=format&fit=crop`;
@@ -620,14 +615,14 @@ export default function HomePage() {
 
             {/* RIGHT COLUMN: Specifications and Details (5 cols) */}
             <div className="lg:col-span-5 space-y-6 md:space-y-8">
-              
+
               {/* Header Title Specs */}
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-xs text-accent uppercase tracking-widest font-semibold">
                   <MapPin className="w-3.5 h-3.5" />
                   <span>{activeProperty.location}</span>
                 </div>
-                
+
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeProperty.id}
@@ -736,15 +731,15 @@ export default function HomePage() {
 
               {/* Call to action & Brochure */}
               <div className="pt-2 flex flex-col sm:flex-row gap-4">
-                <button 
+                <button
                   onClick={() => setIsInquiryOpen(true)}
                   className="flex-1 bg-accent text-secondary hover:bg-accent-hover text-xs uppercase tracking-widest py-4 px-6 rounded-xl font-semibold shadow-md transition-all duration-300 flex items-center justify-center gap-2 group text-center"
                 >
                   {activeProperty.type === "sale" ? t("cta.inquirePurchase") : t("cta.inquireLease")}
                   <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </button>
-                
-                <button 
+
+                <button
                   onClick={() => setIsGalleryOpen(true)}
                   className="bg-transparent border border-border-custom text-primary hover:border-text-muted text-xs uppercase tracking-widest py-4 px-6 rounded-xl font-medium transition-colors text-center"
                 >
@@ -794,7 +789,7 @@ export default function HomePage() {
       <footer className="py-16 bg-primary text-secondary">
         <div className="editorial-container">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 mb-12">
-            
+
             <div className="space-y-4">
               <span className="text-xs uppercase tracking-[0.25em] font-semibold text-secondary block">
                 SKY PROPERTY <span className="font-light opacity-50">BALI</span>
@@ -802,8 +797,8 @@ export default function HomePage() {
               <p className="text-xs text-secondary/60 leading-relaxed max-w-xs">
                 {t("footer.description")}
               </p>
-            </div>    
-            
+            </div>
+
             <div>
               <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold block mb-4">{t("footer.locations")}</span>
               <ul className="text-xs text-secondary/70 space-y-2">
@@ -837,9 +832,9 @@ export default function HomePage() {
               <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold block mb-4">{t("footer.newsletter")}</span>
               <p className="text-xs text-secondary/50 mb-3">{t("footer.newsletterDesc")}</p>
               <div className="flex border-b border-secondary/20 pb-2">
-                <input 
-                  type="email" 
-                  placeholder={t("footer.emailPlaceholder")} 
+                <input
+                  type="email"
+                  placeholder={t("footer.emailPlaceholder")}
                   className="bg-transparent text-xs w-full text-secondary placeholder:text-secondary/40 focus:outline-none"
                 />
                 <button className="text-accent hover:text-accent-hover transition-colors">
@@ -868,16 +863,16 @@ export default function HomePage() {
         {isInquiryOpen && (
           <>
             {/* Backdrop */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsInquiryOpen(false)}
               className="fixed inset-0 z-50 bg-primary/40 backdrop-blur-sm"
             />
-            
+
             {/* Centered Modal */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -885,11 +880,11 @@ export default function HomePage() {
               className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
             >
               <div className="bg-secondary border border-border-custom rounded-2xl shadow-2xl w-full max-w-sm pointer-events-auto overflow-hidden">
-                
+
                 {/* Header */}
                 <div className="p-6 pb-4 flex items-center justify-between">
                   <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold">{t("inquiry.title")}</span>
-                  <button 
+                  <button
                     onClick={() => setIsInquiryOpen(false)}
                     className="p-1 rounded-full hover:bg-card-bg text-primary transition-colors"
                   >
@@ -916,19 +911,6 @@ export default function HomePage() {
 
                 {/* WhatsApp Contact Buttons */}
                 <div className="p-6 pt-4 space-y-3">
-                  <button
-                    onClick={() => handleWhatsApp("6281339900044")}
-                    className="w-full flex items-center gap-4 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 hover:border-[#25D366]/50 rounded-xl px-5 py-4 transition-all duration-300 group"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center flex-shrink-0 shadow-sm">
-                      <MessageCircle className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="text-left min-w-0">
-                      <span className="text-sm font-semibold text-primary block">Man</span>
-                      <span className="text-xs text-text-muted">+62 813 3990 0044</span>
-                    </div>
-                    <ArrowUpRight className="w-4 h-4 text-text-muted group-hover:text-[#25D366] ml-auto flex-shrink-0 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                  </button>
 
                   <button
                     onClick={() => handleWhatsApp("6281353306674")}
@@ -940,6 +922,20 @@ export default function HomePage() {
                     <div className="text-left min-w-0">
                       <span className="text-sm font-semibold text-primary block">Gina</span>
                       <span className="text-xs text-text-muted">+62 813 5330 6674</span>
+                    </div>
+                    <ArrowUpRight className="w-4 h-4 text-text-muted group-hover:text-[#25D366] ml-auto flex-shrink-0 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                  </button>
+
+                  <button
+                    onClick={() => handleWhatsApp("6281339900044")}
+                    className="w-full flex items-center gap-4 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 hover:border-[#25D366]/50 rounded-xl px-5 py-4 transition-all duration-300 group"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center flex-shrink-0 shadow-sm">
+                      <MessageCircle className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="text-left min-w-0">
+                      <span className="text-sm font-semibold text-primary block">Man</span>
+                      <span className="text-xs text-text-muted">+62 813 3990 0044</span>
                     </div>
                     <ArrowUpRight className="w-4 h-4 text-text-muted group-hover:text-[#25D366] ml-auto flex-shrink-0 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </button>
@@ -958,7 +954,7 @@ export default function HomePage() {
       {/* --- FULL SCREEN OVERLAY LIGHTBOX DETAIL VIEWER --- */}
       <AnimatePresence>
         {isGalleryOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -971,7 +967,7 @@ export default function HomePage() {
                 <span className="text-secondary/40 text-xs">/</span>
                 <h4 className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-secondary truncate">{activeProperty.title}</h4>
               </div>
-              <button 
+              <button
                 onClick={() => setIsGalleryOpen(false)}
                 className="flex items-center gap-2 text-xs uppercase tracking-widest text-secondary/60 hover:text-secondary transition-colors group flex-shrink-0 ml-4"
               >
@@ -982,7 +978,7 @@ export default function HomePage() {
 
             {/* Content view: Large image left, specifications grid right */}
             <div className="flex-1 overflow-y-auto no-scrollbar py-6 sm:py-8 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-              
+
               {/* Image box with gallery navigation */}
               <div className="lg:col-span-7 space-y-4">
                 <div className="aspect-[4/3] md:aspect-[16/10] bg-secondary/5 rounded-2xl overflow-hidden border border-secondary/10 relative group">
@@ -1029,11 +1025,10 @@ export default function HomePage() {
                         <button
                           key={idx}
                           onClick={() => setActiveImageIndex(idx)}
-                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                            idx === activeImageIndex
-                              ? "bg-accent scale-125"
-                              : "bg-secondary/50 hover:bg-secondary/80"
-                          }`}
+                          className={`w-2 h-2 rounded-full transition-all duration-300 ${idx === activeImageIndex
+                            ? "bg-accent scale-125"
+                            : "bg-secondary/50 hover:bg-secondary/80"
+                            }`}
                           aria-label={`View photo ${idx + 1}`}
                         />
                       ))}
@@ -1122,7 +1117,7 @@ export default function HomePage() {
                 </div>
 
                 <div className="pt-4">
-                  <button 
+                  <button
                     onClick={() => {
                       setIsGalleryOpen(false);
                       setIsInquiryOpen(true);
@@ -1140,7 +1135,7 @@ export default function HomePage() {
             <div className="p-4 sm:p-6 md:p-8 border-t border-secondary/10 flex items-center justify-between text-[11px] sm:text-xs text-secondary/40 max-w-7xl mx-auto w-full flex-shrink-0">
               <span>Land {filteredProperties.indexOf(activeProperty) + 1} of {filteredProperties.length}</span>
               <div className="flex gap-4">
-                <button 
+                <button
                   onClick={() => {
                     const currentIndex = filteredProperties.indexOf(activeProperty);
                     const prevIndex = currentIndex === 0 ? filteredProperties.length - 1 : currentIndex - 1;
@@ -1151,7 +1146,7 @@ export default function HomePage() {
                   <ChevronLeft className="w-4 h-4" /> {t("lightbox.prev")}
                 </button>
                 <span>|</span>
-                <button 
+                <button
                   onClick={() => {
                     const currentIndex = filteredProperties.indexOf(activeProperty);
                     const nextIndex = currentIndex === filteredProperties.length - 1 ? 0 : currentIndex + 1;
@@ -1179,11 +1174,11 @@ export default function HomePage() {
       >
         {/* Pulse ring animation */}
         <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-25" />
-        
+
         {/* Button */}
         <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#25D366] hover:bg-[#1DA851] shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110">
           <svg viewBox="0 0 32 32" className="w-7 h-7 sm:w-8 sm:h-8 fill-white">
-            <path d="M16.004 0h-.008C7.174 0 0 7.176 0 16c0 3.5 1.128 6.744 3.046 9.378L1.054 31.29l6.118-1.958A15.914 15.914 0 0016.004 32C24.826 32 32 24.822 32 16S24.826 0 16.004 0zm9.312 22.594c-.39 1.1-1.932 2.014-3.168 2.28-.846.18-1.95.324-5.67-1.218-4.762-1.972-7.828-6.81-8.066-7.126-.23-.316-1.904-2.536-1.904-4.836s1.204-3.432 1.632-3.902c.39-.428.914-.612 1.218-.612.152 0 .29.008.414.014.428.018.642.044.924.716.352.838 1.21 2.95 1.316 3.164.108.214.214.498.076.784-.13.29-.244.47-.458.72-.214.252-.418.444-.632.716-.196.236-.418.49-.176.918.242.428 1.078 1.778 2.314 2.88 1.59 1.416 2.93 1.856 3.344 2.062.414.206.656.176.898-.108.248-.29 1.058-1.232 1.34-1.656.276-.424.558-.352.938-.214.384.136 2.434 1.148 2.852 1.356.418.21.696.316.798.49.1.176.1 1.012-.29 2.112z"/>
+            <path d="M16.004 0h-.008C7.174 0 0 7.176 0 16c0 3.5 1.128 6.744 3.046 9.378L1.054 31.29l6.118-1.958A15.914 15.914 0 0016.004 32C24.826 32 32 24.822 32 16S24.826 0 16.004 0zm9.312 22.594c-.39 1.1-1.932 2.014-3.168 2.28-.846.18-1.95.324-5.67-1.218-4.762-1.972-7.828-6.81-8.066-7.126-.23-.316-1.904-2.536-1.904-4.836s1.204-3.432 1.632-3.902c.39-.428.914-.612 1.218-.612.152 0 .29.008.414.014.428.018.642.044.924.716.352.838 1.21 2.95 1.316 3.164.108.214.214.498.076.784-.13.29-.244.47-.458.72-.214.252-.418.444-.632.716-.196.236-.418.49-.176.918.242.428 1.078 1.778 2.314 2.88 1.59 1.416 2.93 1.856 3.344 2.062.414.206.656.176.898-.108.248-.29 1.058-1.232 1.34-1.656.276-.424.558-.352.938-.214.384.136 2.434 1.148 2.852 1.356.418.21.696.316.798.49.1.176.1 1.012-.29 2.112z" />
           </svg>
         </div>
 
