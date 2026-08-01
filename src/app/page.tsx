@@ -824,7 +824,12 @@ export default function HomePage() {
                     <span>Gina — +62 813 5330 6674</span>
                   </a>
                 </li>
-                <li>Jalan Pantai Bingin, Uluwatu, Bali</li>
+                <li>
+                  <a href="https://www.tiktok.com/@gin4b4li?_r=1&_t=ZS-98X3pVBvac5" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-secondary transition-colors">
+                    <Globe className="w-3.5 h-3.5 text-accent" />
+                    <span>TikTok — @gin4b4li</span>
+                  </a>
+                </li>
               </ul>
             </div>
 
@@ -851,7 +856,7 @@ export default function HomePage() {
               <a href="#" className="hover:text-secondary/80 transition-colors">{t("footer.privacy")}</a>
               <a href="#" className="hover:text-secondary/80 transition-colors">{t("footer.terms")}</a>
               <a href="#" className="hover:text-secondary/80 transition-colors">{t("footer.instagram")}</a>
-              <a href="https://tiktok.com/@gin4b4li" target="_blank" rel="noopener noreferrer" className="hover:text-secondary/80 transition-colors">TikTok @gin4b4li</a>
+              <a href="https://www.tiktok.com/@gin4b4li?_r=1&_t=ZS-98X3pVBvac5" target="_blank" rel="noopener noreferrer" className="hover:text-secondary/80 transition-colors">TikTok @gin4b4li</a>
               <a href="https://tiktok.com/@richtransportbali" target="_blank" rel="noopener noreferrer" className="hover:text-secondary/80 transition-colors">TikTok @richtransportbali</a>
             </div>
           </div>
