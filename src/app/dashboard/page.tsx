@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus, Pencil, Trash2, X, Save, MapPin, ArrowLeft,
   Layers, Eye, Tag, ChevronDown, Check, AlertCircle,
-  LayoutDashboard, Image as ImageIcon, Upload, FileArchive
+  LayoutDashboard, Image as ImageIcon, Upload, FileArchive, Lock
 } from "lucide-react";
 import type { Property } from "../data/listings";
 
@@ -32,6 +32,9 @@ export default function DashboardPage() {
   const [filterType, setFilterType] = useState<"all" | "lease" | "sale">("all");
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [singleImageUploading, setSingleImageUploading] = useState(false);
 
   const fetchListings = async () => {
     try {
@@ -147,6 +150,91 @@ export default function DashboardPage() {
     const file = e.dataTransfer.files[0];
     if (file) handleZipUpload(file);
   };
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Simple hardcoded password for now. Can be moved to env variable.
+    if (passwordInput === "skyadmin2026") {
+      setIsAuthenticated(true);
+    } else {
+      showToast("Incorrect password", "error");
+    }
+  };
+
+  const handleSingleImageUpload = async (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      showToast("Please upload an image file", "error");
+      return;
+    }
+    setSingleImageUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      // Since we need to save the file, we can use a new API endpoint or modify existing
+      // For now, let's use the same upload endpoint but just save the single image
+      // We will need to create a new API route for single image upload or modify the ZIP one.
+      // Let's assume we create /api/upload-image
+      const res = await fetch("/api/upload-image", { method: "POST", body: fd });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      
+      // Append the new image URL to the images list
+      const newImagesText = imagesText ? `${imagesText}\n${data.imageUrl}` : data.imageUrl;
+      setImagesText(newImagesText);
+      showToast("Image uploaded successfully");
+    } catch (e) {
+      showToast("Failed to upload image", "error");
+    } finally {
+      setSingleImageUploading(false);
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#0F0F0F] flex flex-col items-center justify-center text-[#E8E4DD] p-4">
+        {/* Toast */}
+        <AnimatePresence>
+          {toast && (
+            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
+              className={`fixed top-6 right-6 z-[100] px-5 py-3 rounded-xl text-sm font-medium shadow-2xl flex items-center gap-2 ${toast.type === "success" ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" : "bg-red-500/20 text-red-300 border border-red-500/30"}`}>
+              {toast.type === "success" ? <Check className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
+              {toast.msg}
+            </motion.div>
+          )}
+        </AnimatePresence>
+        
+        <div className="bg-[#1A1A1A] border border-[#2A2A2A] rounded-2xl p-8 max-w-sm w-full shadow-2xl flex flex-col items-center">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C85A32] to-[#E8744A] flex items-center justify-center mb-6">
+            <Lock className="w-6 h-6 text-white" />
+          </div>
+          <h1 className="text-xl font-light mb-2">Admin Dashboard</h1>
+          <p className="text-sm text-[#666] mb-8 text-center">Please enter the password to access the property manager.</p>
+          
+          <form onSubmit={handleLogin} className="w-full space-y-4">
+            <div>
+              <input 
+                type="password" 
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                placeholder="Enter password..."
+                className="w-full bg-[#111] border border-[#2A2A2A] rounded-xl px-4 py-3 text-sm text-[#E8E4DD] placeholder:text-[#444] focus:outline-none focus:border-[#C85A32]/50 transition-colors"
+                autoFocus
+              />
+            </div>
+            <button 
+              type="submit"
+              className="w-full bg-[#C85A32] hover:bg-[#AF4C27] text-white text-xs uppercase tracking-widest py-3.5 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#C85A32]/20"
+            >
+              Unlock Dashboard
+            </button>
+          </form>
+          <a href="/" className="mt-6 flex items-center gap-2 text-[#666] hover:text-[#E8E4DD] transition-colors text-xs uppercase tracking-widest">
+            <ArrowLeft className="w-3 h-3" /> Back to Site
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   const filtered = filterType === "all" ? listings : listings.filter(l => l.type === filterType);
   const leaseCount = listings.filter(l => l.type === "lease").length;
@@ -391,9 +479,33 @@ export default function DashboardPage() {
 
                 {/* Images */}
                 <div>
-                  <label className="text-[10px] uppercase tracking-widest text-[#666] font-semibold mb-2 block">
-                    Image Paths <span className="text-[#555] font-normal">(one per line)</span>
-                  </label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-[10px] uppercase tracking-widest text-[#666] font-semibold block">
+                      Image Paths <span className="text-[#555] font-normal">(one per line)</span>
+                    </label>
+                    
+                    {/* Single Image Upload Button */}
+                    <label className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-md bg-[#C85A32]/10 text-[#C85A32] hover:bg-[#C85A32]/20 border border-[#C85A32]/20 transition-all cursor-pointer font-semibold">
+                      {singleImageUploading ? (
+                        <div className="w-3 h-3 border-2 border-[#C85A32] border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <Upload className="w-3 h-3" />
+                      )}
+                      Upload Image
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        className="hidden" 
+                        disabled={singleImageUploading}
+                        onChange={e => { 
+                          const f = e.target.files?.[0]; 
+                          if (f) handleSingleImageUpload(f); 
+                          e.target.value = ""; 
+                        }} 
+                      />
+                    </label>
+                  </div>
+                  
                   <textarea value={imagesText} onChange={e => setImagesText(e.target.value)} rows={3}
                     placeholder={"/assets/your-folder/1.jpeg\n/assets/your-folder/2.jpeg"}
                     className="w-full bg-[#1A1A1A] border border-[#2A2A2A] rounded-xl px-4 py-3 text-sm text-[#E8E4DD] placeholder:text-[#444] focus:outline-none focus:border-[#C85A32]/50 transition-colors resize-none font-mono text-xs" />
