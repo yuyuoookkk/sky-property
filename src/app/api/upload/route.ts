@@ -219,7 +219,7 @@ export async function POST(request: NextRequest) {
         const data = await zipEntry.async("nodebuffer");
         const outPath = path.join(outputDir, fileName);
         fs.writeFileSync(outPath, data);
-        extractedImages.push(`/assets/${folderSlug}/${fileName}`);
+        extractedImages.push(`/api/assets/${folderSlug}/${fileName}`);
       }
     }
 

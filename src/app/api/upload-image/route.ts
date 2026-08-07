@@ -31,8 +31,8 @@ export async function POST(request: NextRequest) {
     
     fs.writeFileSync(outPath, buffer);
     
-    // Return the public URL
-    const imageUrl = `/assets/uploads/${uniqueName}`;
+    // Return the public URL using the dynamic API route to bypass Next.js caching
+    const imageUrl = `/api/assets/uploads/${uniqueName}`;
 
     return NextResponse.json({ imageUrl, success: true });
   } catch (error) {
