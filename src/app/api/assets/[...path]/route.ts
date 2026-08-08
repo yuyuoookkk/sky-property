@@ -5,7 +5,7 @@ import mime from "mime";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
   try {
     const { path: pathArray } = await params;
