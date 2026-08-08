@@ -553,15 +553,15 @@ export default function HomePage() {
               <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold block mb-4">{t("footer.contact")}</span>
               <ul className="text-xs text-secondary/70 space-y-3">
                 <li>
-                  <a href="https://wa.me/6281339900044" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-secondary transition-colors">
-                    <MessageCircle className="w-3.5 h-3.5 text-accent" />
-                    <span>Man — +62 813 3990 0044</span>
-                  </a>
-                </li>
-                <li>
                   <a href="https://wa.me/6281353306674" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-secondary transition-colors">
                     <MessageCircle className="w-3.5 h-3.5 text-accent" />
                     <span>Gina — +62 813 5330 6674</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://wa.me/6281339900044" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-secondary transition-colors">
+                    <MessageCircle className="w-3.5 h-3.5 text-accent" />
+                    <span>Oman — +62 813 3990 0044</span>
                   </a>
                 </li>
                 <li>
