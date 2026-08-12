@@ -10,6 +10,12 @@ export interface Property {
   description: string;
   details: string[];
 
+  // Bilingual content (auto-translated)
+  description_en?: string;
+  description_id?: string;
+  details_en?: string[];
+  details_id?: string[];
+
   // Land specs
   landArea: string;
   zoning?: string;

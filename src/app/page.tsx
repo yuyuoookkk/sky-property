@@ -389,7 +389,7 @@ export default function HomePage() {
                   transition={{ duration: 0.4 }}
                   className="text-text-muted text-sm leading-relaxed"
                 >
-                  {activeProperty.description}
+                  {language === "en" ? (activeProperty.description_en || activeProperty.description) : (activeProperty.description_id || activeProperty.description)}
                 </motion.p>
               </AnimatePresence>
 
@@ -852,7 +852,7 @@ export default function HomePage() {
                 <div className="space-y-3">
                   <span className="text-[10px] uppercase tracking-widest text-secondary/40 block">{t("lightbox.keyFeatures")}</span>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-secondary/80">
-                    {activeProperty.details.map((detail, index) => (
+                    {(language === "en" ? (activeProperty.details_en || activeProperty.details) : (activeProperty.details_id || activeProperty.details)).map((detail, index) => (
                       <li key={index} className="flex items-center gap-2.5">
                         <Check className="w-3.5 h-3.5 text-accent flex-shrink-0" />
                         <span>{detail}</span>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import { translateListing } from "../translate";
 
 const DATA_PATH = path.join(process.cwd(), "src/app/data/listings.json");
 
@@ -44,10 +45,20 @@ export async function POST(request: NextRequest) {
         .replace(/^-|-$/g, "");
     }
 
-    listings.push(body);
+    // Auto-translate description and details
+    let enrichedBody = body;
+    try {
+      if (body.description && body.description.trim().length > 0) {
+        enrichedBody = await translateListing(body);
+      }
+    } catch (e) {
+      console.error("[listings] Translation failed, saving without translations:", e);
+    }
+
+    listings.push(enrichedBody);
     writeListings(listings);
 
-    return NextResponse.json(body, { status: 201 });
+    return NextResponse.json(enrichedBody, { status: 201 });
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to create listing" },
@@ -72,7 +83,22 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    listings[index] = { ...listings[index], ...body };
+    // Check if description or details changed — re-translate if so
+    const existing = listings[index];
+    let updatedBody = { ...existing, ...body };
+
+    const descChanged = body.description && body.description !== existing.description;
+    const detailsChanged = body.details && JSON.stringify(body.details) !== JSON.stringify(existing.details);
+
+    if (descChanged || detailsChanged) {
+      try {
+        updatedBody = await translateListing(updatedBody);
+      } catch (e) {
+        console.error("[listings] Translation on update failed:", e);
+      }
+    }
+
+    listings[index] = updatedBody;
     writeListings(listings);
 
     return NextResponse.json(listings[index]);
