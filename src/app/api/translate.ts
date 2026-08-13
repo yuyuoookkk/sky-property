@@ -16,6 +16,7 @@ const ID_MARKERS = [
   "menit", "dekat", "menuju", "berada", "mudah", "tinggi",
   "hunian", "investasi", "sewa", "dijual", "disewakan",
   "garansi", "konstruksi", "bonus", "asuransi",
+  "kuning", "merah", "hijau", "biru", "putih", "hitam",
 ];
 
 /**
@@ -75,8 +76,20 @@ async function translateText(
 }
 
 /**
+ * Translate an optional text field. Returns empty string if input is empty.
+ */
+async function translateOptional(
+  text: string | undefined,
+  from: "id" | "en",
+  to: "id" | "en"
+): Promise<string> {
+  if (!text || text.trim().length === 0) return text || "";
+  return translateText(text, from, to);
+}
+
+/**
  * Translate an array of detail strings.
- * Batches them into a single API call using newline separator for efficiency.
+ * Translates each item individually to stay within character limits.
  */
 async function translateDetails(
   details: string[],
@@ -100,28 +113,46 @@ async function translateDetails(
   return results;
 }
 
+// Spec fields that should be translated (short text fields)
+const SPEC_FIELDS = [
+  "zoning",
+  "leaseTerm",
+  "access",
+  "view",
+  "status",
+  "frontage",
+] as const;
+
 /**
  * Auto-translate a listing object.
  * Detects the language of `description` and translates to the other language.
- * Stores both versions in `description_en`/`description_id` and `details_en`/`details_id`.
+ * Translates: title, description, details, and all spec fields
+ * (zoning, leaseTerm, access, view, status, frontage).
  *
+ * Stores both versions with _en/_id suffixes for each field.
  * Returns the enriched listing with both language versions.
  */
 export async function translateListing<
-  T extends {
+  T extends Record<string, unknown> & {
+    title: string;
     description: string;
     details: string[];
-    description_en?: string;
-    description_id?: string;
-    details_en?: string[];
-    details_id?: string[];
   }
 >(listing: T): Promise<T> {
-  const sourceLang = detectLanguage(listing.description);
+  // Detect language from both title and description for better accuracy
+  const combinedText = `${listing.title} ${listing.description}`;
+  const sourceLang = detectLanguage(combinedText);
   const targetLang = sourceLang === "id" ? "en" : "id";
 
   console.log(
     `[translate] Detected language: ${sourceLang}, translating to ${targetLang}`
+  );
+
+  // Translate title
+  const translatedTitle = await translateText(
+    listing.title,
+    sourceLang,
+    targetLang
   );
 
   // Translate description
@@ -138,12 +169,28 @@ export async function translateListing<
     targetLang
   );
 
+  // Translate all spec fields
+  const specTranslations: Record<string, string> = {};
+  for (const field of SPEC_FIELDS) {
+    const value = listing[field] as string | undefined;
+    if (value && value.trim().length > 0) {
+      const translated = await translateOptional(value, sourceLang, targetLang);
+      specTranslations[`${field}_${sourceLang}`] = value;
+      specTranslations[`${field}_${targetLang}`] = translated;
+      // Small delay to avoid rate limiting
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  }
+
   // Store both versions
   return {
     ...listing,
+    [`title_${sourceLang}`]: listing.title,
+    [`title_${targetLang}`]: translatedTitle,
     [`description_${sourceLang}`]: listing.description,
     [`description_${targetLang}`]: translatedDesc,
     [`details_${sourceLang}`]: listing.details,
     [`details_${targetLang}`]: translatedDetails,
+    ...specTranslations,
   };
 }

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus, Pencil, Trash2, X, Save, MapPin, ArrowLeft,
   Layers, Eye, Tag, ChevronDown, Check, AlertCircle,
-  LayoutDashboard, Image as ImageIcon, Upload, FileArchive, Lock
+  LayoutDashboard, Image as ImageIcon, Upload, FileArchive, Lock, Globe
 } from "lucide-react";
 import type { Property } from "../data/listings";
 
@@ -35,6 +35,7 @@ export default function DashboardPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [singleImageUploading, setSingleImageUploading] = useState(false);
+  const [translating, setTranslating] = useState(false);
 
   const fetchListings = async () => {
     try {
@@ -93,6 +94,19 @@ export default function DashboardPage() {
     } catch {
       showToast("Failed to save listing", "error");
     } finally { setSaving(false); }
+  };
+
+  const handleTranslateAll = async () => {
+    setTranslating(true);
+    try {
+      const res = await fetch("/api/translate-all", { method: "POST" });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      showToast(`Translated ${data.translated} listing(s), ${data.skipped} already done`);
+      fetchListings();
+    } catch {
+      showToast("Translation failed", "error");
+    } finally { setTranslating(false); }
   };
 
   const handleDelete = async (id: number) => {
@@ -289,10 +303,17 @@ export default function DashboardPage() {
               <span className="text-xs uppercase tracking-[0.2em] font-semibold">Dashboard</span>
             </div>
           </div>
-          <button onClick={openAdd}
-            className="bg-[#C85A32] hover:bg-[#AF4C27] text-white text-xs uppercase tracking-widest px-5 py-2.5 rounded-xl font-semibold transition-all flex items-center gap-2 shadow-lg shadow-[#C85A32]/20">
-            <Plus className="w-4 h-4" /> Add Listing
-          </button>
+          <div className="flex items-center gap-3">
+            <button onClick={handleTranslateAll} disabled={translating}
+              className="bg-transparent border border-[#2A2A2A] hover:border-[#C85A32] text-[#888] hover:text-[#C85A32] text-xs uppercase tracking-widest px-4 py-2.5 rounded-xl font-semibold transition-all flex items-center gap-2 disabled:opacity-50">
+              {translating ? <div className="w-3.5 h-3.5 border-2 border-[#C85A32] border-t-transparent rounded-full animate-spin" /> : <Globe className="w-3.5 h-3.5" />}
+              {translating ? "Translating..." : "Translate All"}
+            </button>
+            <button onClick={openAdd}
+              className="bg-[#C85A32] hover:bg-[#AF4C27] text-white text-xs uppercase tracking-widest px-5 py-2.5 rounded-xl font-semibold transition-all flex items-center gap-2 shadow-lg shadow-[#C85A32]/20">
+              <Plus className="w-4 h-4" /> Add Listing
+            </button>
+          </div>
         </div>
       </header>
 
@@ -344,7 +365,7 @@ export default function DashboardPage() {
                   {/* Thumbnail */}
                   <div className="aspect-[16/10] bg-[#111] relative overflow-hidden">
                     {p.images[0] ? (
-                      <img src={p.images[0]} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      <img src={p.images[0]} alt={p.title} className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                         onError={e => { (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=600&auto=format&fit=crop"; }} />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center"><ImageIcon className="w-8 h-8 text-[#333]" /></div>
@@ -353,6 +374,15 @@ export default function DashboardPage() {
                       <span className={`text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md font-semibold backdrop-blur-sm ${p.type === "lease" ? "bg-blue-500/20 text-blue-300 border border-blue-500/30" : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"}`}>
                         {p.type === "lease" ? "Leasehold" : "For Sale"}
                       </span>
+                      {p.title_en && p.title_id && p.description_en && p.description_id ? (
+                        <span className="text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md font-semibold backdrop-blur-sm bg-violet-500/20 text-violet-300 border border-violet-500/30 flex items-center gap-1">
+                          <Globe className="w-3 h-3" /> EN/ID
+                        </span>
+                      ) : (
+                        <span className="text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-md font-semibold backdrop-blur-sm bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+                          <Globe className="w-3 h-3" /> No Translation
+                        </span>
+                      )}
                     </div>
                     <div className="absolute top-3 right-3 flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-md px-2 py-1">
                       <ImageIcon className="w-3 h-3 text-[#888]" />
@@ -514,7 +544,7 @@ export default function DashboardPage() {
                     <div className="flex gap-2 mt-3 flex-wrap">
                       {imagesText.split("\n").filter(Boolean).map((src, i) => (
                         <div key={i} className="w-16 h-12 rounded-lg overflow-hidden border border-[#2A2A2A] bg-[#111]">
-                          <img src={src.trim()} alt="" className="w-full h-full object-cover" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
+                          <img src={src.trim()} alt="" className="w-full h-full object-cover object-center" onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
                         </div>
                       ))}
                     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Maximize,
@@ -24,6 +24,16 @@ import { PROPERTIES as STATIC_PROPERTIES, type Property } from "./data/listings"
 export default function HomePage() {
   const [language, setLanguage] = useState<Language>("en");
   const t = (key: string) => translations[language][key] || key;
+
+  // Helper to get translated property field
+  const pt = (property: Property, field: 'title' | 'description' | 'zoning' | 'leaseTerm' | 'access' | 'view' | 'status' | 'frontage') => {
+    const langField = `${field}_${language}` as keyof Property;
+    return (property[langField] as string) || property[field] || "";
+  };
+  const ptDetails = (property: Property) => {
+    const langField = `details_${language}` as keyof Property;
+    return (property[langField] as string[]) || property.details;
+  };
 
   const [PROPERTIES, setProperties] = useState<Property[]>(STATIC_PROPERTIES);
 
@@ -52,6 +62,21 @@ export default function HomePage() {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const thumbnailStripRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll thumbnail strip to keep active thumbnail visible
+  useEffect(() => {
+    if (thumbnailStripRef.current) {
+      const container = thumbnailStripRef.current;
+      const activeThumb = container.children[activeImageIndex] as HTMLElement;
+      if (activeThumb) {
+        const containerRect = container.getBoundingClientRect();
+        const thumbRect = activeThumb.getBoundingClientRect();
+        const scrollLeft = activeThumb.offsetLeft - container.offsetLeft - (containerRect.width / 2) + (thumbRect.width / 2);
+        container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+      }
+    }
+  }, [activeImageIndex, activeProperty.id]);
 
   const handlePropertyChange = (property: Property) => {
     setActiveProperty(property);
@@ -81,7 +106,7 @@ export default function HomePage() {
 
   const handleWhatsApp = (number: string) => {
     const message = encodeURIComponent(
-      `Hi, I am interested in ${activeProperty.title} (${activeProperty.location}). Please provide more details.`
+      `Hi, I am interested in ${pt(activeProperty, 'title')} (${activeProperty.location}). Please provide more details.`
     );
     window.open(`https://wa.me/${number}?text=${message}`, "_blank");
     setIsInquiryOpen(false);
@@ -237,7 +262,7 @@ export default function HomePage() {
                     : "bg-transparent text-text-muted border-border-custom hover:text-primary hover:border-text-muted"
                     }`}
                 >
-                  {property.title}
+                  {pt(property, 'title')}
                 </button>
               ))}
             </div>
@@ -264,7 +289,7 @@ export default function HomePage() {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.98 }}
                       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-center"
                       onError={(e) => {
                         e.currentTarget.src = `https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1200&auto=format&fit=crop`;
                       }}
@@ -298,56 +323,44 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  {/* Photo counter & dot indicators */}
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between z-10">
+                  {/* Photo counter badge */}
+                  <div className="absolute bottom-4 left-4 z-10">
                     <div className="bg-secondary/80 backdrop-blur-sm text-primary text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-md border border-border-custom font-semibold">
                       {activeImageIndex + 1} / {activeProperty.images.length}
                     </div>
-                    {activeProperty.images.length > 1 && (
-                      <div className="flex gap-1.5">
-                        {activeProperty.images.map((_, idx) => (
-                          <button
-                            key={idx}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setActiveImageIndex(idx);
-                            }}
-                            className={`w-2 h-2 rounded-full transition-all duration-300 ${idx === activeImageIndex
-                              ? "bg-accent scale-125"
-                              : "bg-secondary/60 hover:bg-secondary/90"
-                              }`}
-                            aria-label={`View photo ${idx + 1}`}
-                          />
-                        ))}
-                      </div>
-                    )}
                   </div>
                 </div>
 
-                {/* Flexible Thumbnail selector list */}
-                <div className="flex flex-wrap gap-2.5 sm:gap-3">
-                  {activeProperty.images.map((img, idx) => (
-                    <button
-                      key={`${activeProperty.id}-img-${idx}`}
-                      onClick={() => setActiveImageIndex(idx)}
-                      className={`relative w-16 sm:w-24 aspect-[4/3] rounded-lg overflow-hidden border transition-all duration-300 ${idx === activeImageIndex
-                        ? "border-accent ring-1 ring-accent"
-                        : "border-border-custom hover:border-text-muted"
-                        }`}
-                    >
-                      <img
-                        src={img}
-                        alt={`${activeProperty.title} - Photo ${idx + 1}`}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src = `https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=300&auto=format&fit=crop`;
-                        }}
-                      />
-                      {idx !== activeImageIndex && (
-                        <div className="absolute inset-0 bg-secondary/30 hover:bg-transparent transition-colors duration-300" />
-                      )}
-                    </button>
-                  ))}
+                {/* Scrollable Thumbnail selector strip */}
+                <div className="relative">
+                  <div ref={thumbnailStripRef} className="flex gap-2.5 sm:gap-3 overflow-x-auto no-scrollbar pb-1" style={{ scrollBehavior: 'smooth' }}>
+                    {activeProperty.images.map((img, idx) => (
+                      <button
+                        key={`${activeProperty.id}-img-${idx}`}
+                        onClick={() => setActiveImageIndex(idx)}
+                        className={`relative flex-shrink-0 w-16 sm:w-24 aspect-[4/3] rounded-lg overflow-hidden border transition-all duration-300 ${idx === activeImageIndex
+                          ? "border-accent ring-1 ring-accent"
+                          : "border-border-custom hover:border-text-muted"
+                          }`}
+                      >
+                        <img
+                          src={img}
+                          alt={`${activeProperty.title} - Photo ${idx + 1}`}
+                          className="w-full h-full object-cover object-center"
+                          onError={(e) => {
+                            e.currentTarget.src = `https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=300&auto=format&fit=crop`;
+                          }}
+                        />
+                        {idx !== activeImageIndex && (
+                          <div className="absolute inset-0 bg-secondary/30 hover:bg-transparent transition-colors duration-300" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                  {/* Scroll fade indicators for many images */}
+                  {activeProperty.images.length > 6 && (
+                    <div className="absolute right-0 top-0 bottom-1 w-12 bg-gradient-to-l from-secondary to-transparent pointer-events-none rounded-r-lg" />
+                  )}
                 </div>
 
               </div>
@@ -372,7 +385,7 @@ export default function HomePage() {
                     transition={{ duration: 0.4 }}
                     className="flex justify-between items-baseline gap-4"
                   >
-                    <h3 className="text-3xl sm:text-4xl font-light text-primary tracking-tight">{activeProperty.title}</h3>
+                    <h3 className="text-3xl sm:text-4xl font-light text-primary tracking-tight">{pt(activeProperty, 'title')}</h3>
                     <span className="text-lg sm:text-xl serif-font italic text-accent font-medium whitespace-nowrap">{activeProperty.price}</span>
                   </motion.div>
                 </AnimatePresence>
@@ -389,7 +402,7 @@ export default function HomePage() {
                   transition={{ duration: 0.4 }}
                   className="text-text-muted text-sm leading-relaxed"
                 >
-                  {language === "en" ? (activeProperty.description_en || activeProperty.description) : (activeProperty.description_id || activeProperty.description)}
+                  {pt(activeProperty, 'description')}
                 </motion.p>
               </AnimatePresence>
 
@@ -419,7 +432,7 @@ export default function HomePage() {
                     </div>
                     <div className="min-w-0">
                       <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">{t("spec.zoning")}</span>
-                      <span className="text-xs sm:text-sm font-semibold text-primary block truncate">{activeProperty.zoning}</span>
+                      <span className="text-xs sm:text-sm font-semibold text-primary block truncate">{pt(activeProperty, 'zoning')}</span>
                     </div>
                   </div>
 
@@ -442,7 +455,7 @@ export default function HomePage() {
                       </div>
                       <div className="min-w-0">
                         <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">{activeProperty.type === "sale" ? t("spec.status") : t("spec.leaseTerm")}</span>
-                        <span className="text-xs sm:text-sm font-semibold text-primary block truncate">{activeProperty.type === "sale" ? activeProperty.status : activeProperty.leaseTerm}</span>
+                        <span className="text-xs sm:text-sm font-semibold text-primary block truncate">{activeProperty.type === "sale" ? pt(activeProperty, 'status') : pt(activeProperty, 'leaseTerm')}</span>
                       </div>
                     </div>
                   )}
@@ -453,7 +466,7 @@ export default function HomePage() {
                     </div>
                     <div className="min-w-0">
                       <span className="block text-[9px] sm:text-[10px] uppercase tracking-widest text-text-muted">{t("spec.access")}</span>
-                      <span className="text-xs sm:text-sm font-semibold text-primary block truncate">{activeProperty.access}</span>
+                      <span className="text-xs sm:text-sm font-semibold text-primary block truncate">{pt(activeProperty, 'access')}</span>
                     </div>
                   </div>
 
@@ -642,7 +655,7 @@ export default function HomePage() {
                   <div className="bg-card-bg/60 border border-border-custom rounded-xl p-4 flex justify-between items-center">
                     <div className="min-w-0">
                       <span className="text-xs text-text-muted block">{t("inquiry.selectedProperty")}</span>
-                      <span className="text-sm font-semibold text-primary block truncate">{activeProperty.title}</span>
+                      <span className="text-sm font-semibold text-primary block truncate">{pt(activeProperty, 'title')}</span>
                     </div>
                     <span className="text-xs text-accent font-medium whitespace-nowrap ml-3">{activeProperty.price}</span>
                   </div>
@@ -710,7 +723,7 @@ export default function HomePage() {
               <div className="flex items-center gap-2 min-w-0">
                 <span className="text-xs uppercase tracking-widest text-accent font-semibold truncate">{activeProperty.location}</span>
                 <span className="text-secondary/40 text-xs">/</span>
-                <h4 className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-secondary truncate">{activeProperty.title}</h4>
+                <h4 className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-secondary truncate">{pt(activeProperty, 'title')}</h4>
               </div>
               <button
                 onClick={() => setIsGalleryOpen(false)}
@@ -736,7 +749,7 @@ export default function HomePage() {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.4 }}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-center"
                       onError={(e) => {
                         e.currentTarget.src = `https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1200&auto=format&fit=crop`;
                       }}
@@ -764,7 +777,7 @@ export default function HomePage() {
                   )}
 
                   {/* Photo counter in lightbox */}
-                  {activeProperty.images.length > 1 && (
+                  {activeProperty.images.length > 1 && activeProperty.images.length <= 12 && (
                     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
                       {activeProperty.images.map((_, idx) => (
                         <button
@@ -777,6 +790,12 @@ export default function HomePage() {
                           aria-label={`View photo ${idx + 1}`}
                         />
                       ))}
+                    </div>
+                  )}
+                  {/* Compact photo counter for many images */}
+                  {activeProperty.images.length > 12 && (
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-primary/60 backdrop-blur-sm text-secondary text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-md font-semibold">
+                      {activeImageIndex + 1} / {activeProperty.images.length}
                     </div>
                   )}
                 </div>
@@ -812,12 +831,12 @@ export default function HomePage() {
                   </div>
                   <div className="py-3 flex justify-between">
                     <span className="text-secondary/50 font-light">{t("lightbox.zoning")}</span>
-                    <span className="font-medium text-secondary">{activeProperty.zoning}</span>
+                    <span className="font-medium text-secondary">{pt(activeProperty, 'zoning')}</span>
                   </div>
                   {activeProperty.leaseTerm && (
                     <div className="py-3 flex justify-between">
                       <span className="text-secondary/50 font-light">{activeProperty.type === "sale" ? t("lightbox.ownership") : t("lightbox.leaseTerm")}</span>
-                      <span className="font-medium text-secondary">{activeProperty.type === "sale" ? activeProperty.status : activeProperty.leaseTerm}</span>
+                      <span className="font-medium text-secondary">{activeProperty.type === "sale" ? pt(activeProperty, 'status') : pt(activeProperty, 'leaseTerm')}</span>
                     </div>
                   )}
                   {activeProperty.minRental && (
@@ -828,18 +847,18 @@ export default function HomePage() {
                   )}
                   <div className="py-3 flex justify-between">
                     <span className="text-secondary/50 font-light">{t("lightbox.access")}</span>
-                    <span className="font-medium text-secondary">{activeProperty.access}</span>
+                    <span className="font-medium text-secondary">{pt(activeProperty, 'access')}</span>
                   </div>
                   {activeProperty.view && (
                     <div className="py-3 flex justify-between">
                       <span className="text-secondary/50 font-light">{t("lightbox.view")}</span>
-                      <span className="font-medium text-secondary">{activeProperty.view}</span>
+                      <span className="font-medium text-secondary">{pt(activeProperty, 'view')}</span>
                     </div>
                   )}
                   {activeProperty.frontage && (
                     <div className="py-3 flex justify-between">
                       <span className="text-secondary/50 font-light">{t("lightbox.frontage")}</span>
-                      <span className="font-medium text-secondary">{activeProperty.frontage}</span>
+                      <span className="font-medium text-secondary">{pt(activeProperty, 'frontage')}</span>
                     </div>
                   )}
                   <div className="py-3 flex justify-between">
@@ -852,7 +871,7 @@ export default function HomePage() {
                 <div className="space-y-3">
                   <span className="text-[10px] uppercase tracking-widest text-secondary/40 block">{t("lightbox.keyFeatures")}</span>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-secondary/80">
-                    {(language === "en" ? (activeProperty.details_en || activeProperty.details) : (activeProperty.details_id || activeProperty.details)).map((detail, index) => (
+                    {ptDetails(activeProperty).map((detail, index) => (
                       <li key={index} className="flex items-center gap-2.5">
                         <Check className="w-3.5 h-3.5 text-accent flex-shrink-0" />
                         <span>{detail}</span>

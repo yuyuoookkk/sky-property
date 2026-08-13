@@ -11,10 +11,24 @@ export interface Property {
   details: string[];
 
   // Bilingual content (auto-translated)
+  title_en?: string;
+  title_id?: string;
   description_en?: string;
   description_id?: string;
   details_en?: string[];
   details_id?: string[];
+  zoning_en?: string;
+  zoning_id?: string;
+  leaseTerm_en?: string;
+  leaseTerm_id?: string;
+  access_en?: string;
+  access_id?: string;
+  view_en?: string;
+  view_id?: string;
+  status_en?: string;
+  status_id?: string;
+  frontage_en?: string;
+  frontage_id?: string;
 
   // Land specs
   landArea: string;

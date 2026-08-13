@@ -87,10 +87,11 @@ export async function PUT(request: NextRequest) {
     const existing = listings[index];
     let updatedBody = { ...existing, ...body };
 
+    const titleChanged = body.title && body.title !== existing.title;
     const descChanged = body.description && body.description !== existing.description;
     const detailsChanged = body.details && JSON.stringify(body.details) !== JSON.stringify(existing.details);
 
-    if (descChanged || detailsChanged) {
+    if (titleChanged || descChanged || detailsChanged) {
       try {
         updatedBody = await translateListing(updatedBody);
       } catch (e) {
