@@ -556,8 +556,6 @@ export default function HomePage() {
               <span className="text-[10px] uppercase tracking-[0.2em] text-accent font-semibold block mb-4">{t("footer.locations")}</span>
               <ul className="text-xs text-secondary/70 space-y-2">
                 <li>Uluwatu, Bali</li>
-                <li>Nusa Lembongan, Bali</li>
-                <li>Canggu & Pererenan, Bali</li>
                 <li>Jimbaran, Bali</li>
               </ul>
             </div>
