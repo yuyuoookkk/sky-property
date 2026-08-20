@@ -204,11 +204,11 @@ export default function HomePage() {
             />
             <div className="grid grid-cols-3 gap-4 text-[10px] sm:text-[11px] uppercase tracking-wider text-text-muted">
               <div>
-                <span className="block font-semibold text-primary">{t("hero.stat1.value")}</span>
+                <span className="block font-semibold text-primary">{String(PROPERTIES.filter(p => p.type === "lease").length).padStart(2, "0")}</span>
                 <span>{t("hero.stat1.label")}</span>
               </div>
               <div>
-                <span className="block font-semibold text-primary">{t("hero.stat2.value")}</span>
+                <span className="block font-semibold text-primary">{String(PROPERTIES.filter(p => p.type === "sale").length).padStart(2, "0")}</span>
                 <span>{t("hero.stat2.label")}</span>
               </div>
               <div>
