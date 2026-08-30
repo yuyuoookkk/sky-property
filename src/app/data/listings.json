@@ -53,7 +53,8 @@
     "leaseTerm_id": "5 tahun",
     "leaseTerm_en": "5 years",
     "access_id": "yang sangat mudah menuju berbagai destinasi wisata terkenal, menjadikan lahan ini ideal untuk investasi maupun pengembangan properti jangka panjang.",
-    "access_en": "which is very easy to get to various famous tourist destinations, making this land ideal for investment and long-term property development."
+    "access_en": "which is very easy to get to various famous tourist destinations, making this land ideal for investment and long-term property development.",
+    "category": "land"
   },
   {
     "id": 2,
@@ -147,7 +148,8 @@
     "access_id": "yang mudah ke berbagai destinasi favorit.",
     "access_en": "that's easy to get to your favorite destinations.",
     "status_id": "SHM (Freehold)",
-    "status_en": "SHM (Freehold)"
+    "status_en": "SHM (Freehold)",
+    "category": "villa"
   },
   {
     "id": 3,
@@ -203,7 +205,8 @@
     "view_id": "– ULUWATU, BALI",
     "view_en": "– ULUWATU, BALI",
     "status_id": "Hak Milik)",
-    "status_en": "Proprietary"
+    "status_en": "Proprietary",
+    "category": "land"
   },
   {
     "id": 4,
@@ -258,7 +261,8 @@
     "leaseTerm_id": "5 tahun",
     "leaseTerm_en": "5 years",
     "access_id": "mudah menuju pusat Nusa Dua, Jimbaran, dan area wisata Bali Selatan",
-    "access_en": "easy access to the center of Nusa Dua, Jimbaran, and the tourist area of South Bali"
+    "access_en": "easy access to the center of Nusa Dua, Jimbaran, and the tourist area of South Bali",
+    "category": "land"
   },
   {
     "id": 5,
@@ -317,7 +321,8 @@
     "view_id": "langsung ke Pantai Tanjung Benoa. Sangat cocok untuk dikembangkan kembali menjadi restoran, beach club, café, boutique hotel, maupun usaha komersial lainnya.",
     "view_en": "directly to Tanjung Benoa Beach. It is suitable for redevelopment into restaurants, beach clubs, cafes, boutique hotels, and other commercial businesses.",
     "status_id": "SHM (Sertifikat Hak Milik)",
-    "status_en": "Freehold Title"
+    "status_en": "Freehold Title",
+    "category": "commercial"
   },
   {
     "id": 6,
@@ -381,7 +386,8 @@
     "status_id": "SHM (Sertifikat Hak Milik)",
     "status_en": "Freehold Title",
     "frontage_id": "Akses: 5 Meter",
-    "frontage_en": "Access: 5 Meters"
+    "frontage_en": "Access: 5 Meters",
+    "category": "land"
   },
   {
     "id": 7,
@@ -439,7 +445,8 @@
     "access_id": "yang sangat baik, tanah ini cocok untuk pembangunan villa, guest house, kost eksklusif, ruko, kantor, maupun berbagai usaha komersial lainnya.",
     "access_en": "which is very good, this land is suitable for the construction of villas, guest houses, exclusive boarding houses, shophouses, offices, and various other commercial businesses.",
     "frontage_id": "± 18 meter",
-    "frontage_en": "± 18 meters"
+    "frontage_en": "± 18 meters",
+    "category": "land"
   },
   {
     "id": 8,
@@ -495,7 +502,8 @@
     "access_id": "dari dua sisi jalan (depan dan belakang) sehingga memberikan fleksibilitas tinggi untuk berbagai kebutuhan pembangunan maupun investasi jangka panjang.",
     "access_en": "from two sides of the road (front and back) so as to provide high flexibility for various development needs and long-term investment.",
     "frontage_id": "± 5 meter",
-    "frontage_en": "5 meters."
+    "frontage_en": "5 meters.",
+    "category": "land"
   },
   {
     "id": 9,
@@ -560,7 +568,8 @@
     "access_id": "mudah ke berbagai destinasi wisata terbaik di Bali. Berada di lingkungan villa yang eksklusif dengan akses jalan hotmix, properti ini sangat cocok sebagai hunian pribadi maupun investasi jangka panjang.",
     "access_en": "easy access to the best tourist destinations in Bali. Located in an exclusive villa environment with hotmix road access, this property is perfect as a private residence as well as a long-term investment.",
     "status_id": "Freehold (SHM)",
-    "status_en": "Freehold (SHM)"
+    "status_en": "Freehold (SHM)",
+    "category": "villa"
   },
   {
     "id": 10,
@@ -620,7 +629,8 @@
     "access_id": "utama, serta memiliki pemandangan laut (ocean view) yang memukau, menjadikan properti ini sangat ideal untuk pengembangan resort, villa mewah, beach club, hotel butik, maupun investasi skala besar.",
     "access_en": "main, and has a stunning ocean view, making this property ideal for the development of resorts, luxury villas, beach clubs, boutique hotels, and large-scale investments.",
     "view_id": "– LABUAN SAIT, ULUWATU",
-    "view_en": "– LABUAN SAIT, ULUWATU"
+    "view_en": "– LABUAN SAIT, ULUWATU",
+    "category": "land"
   },
   {
     "id": 11,
@@ -683,7 +693,8 @@
     "status_id": "SHM (Sertifikat Hak Milik)",
     "status_en": "Freehold Title",
     "frontage_id": "±6 Meter",
-    "frontage_en": "±6 meters"
+    "frontage_en": "±6 meters",
+    "category": "land"
   },
   {
     "id": 12,
@@ -740,7 +751,8 @@
     "leaseTerm_id": "Harga Sewa: Rp50 Juta / Are / Tahun",
     "leaseTerm_en": "Rental Price: IDR 50 Million / Are / Year",
     "access_id": "mudah ke berbagai destinasi terkenal dan fasilitas premium.",
-    "access_en": "easy access to famous destinations and premium amenities."
+    "access_en": "easy access to famous destinations and premium amenities.",
+    "category": "land"
   },
   {
     "id": 13,
@@ -797,7 +809,8 @@
     "access_id": "dekat ke Pantai Nyang Nyang dan pusat pariwisata Uluwatu merupakan aset investasi langka yang sangat potensial untuk proyek hospitality maupun villa eksklusif.",
     "access_en": "close to Nyang Nyang Beach and the tourism center of Uluwatu is a rare investment asset with great potential for exclusive hospitality and villa projects.",
     "view_id": "– PANTAI NYANG NYANG, ULUWATU",
-    "view_en": "– NYANG NYANG BEACH, ULUWATU"
+    "view_en": "– NYANG NYANG BEACH, ULUWATU",
+    "category": "land"
   },
   {
     "id": 14,
@@ -849,7 +862,8 @@
       "±12 minutes to I Gusti Ngurah Rai International Airport"
     ],
     "access_id": "mudah ke berbagai fasilitas penting.",
-    "access_en": "easy access to essential amenities."
+    "access_en": "easy access to essential amenities.",
+    "category": "house"
   },
   {
     "id": 15,
@@ -898,7 +912,8 @@
     "leaseTerm_id": "Fasilitas & Keunggulan",
     "leaseTerm_en": "Amenities & Benefits",
     "status_id": "SHM (Sertifikat Hak Milik)",
-    "status_en": "Freehold Title"
+    "status_en": "Freehold Title",
+    "category": "land"
   },
   {
     "id": 16,
@@ -958,7 +973,8 @@
     "status_id": "SHM (Sertifikat Hak Milik)",
     "status_en": "Freehold Title",
     "frontage_id": "±8 Meter",
-    "frontage_en": "±8 meters"
+    "frontage_en": "±8 meters",
+    "category": "land"
   },
   {
     "id": 17,
@@ -1019,7 +1035,8 @@
     "status_id": "SHM (Sertifikat Hak Milik)",
     "status_en": "Freehold Title",
     "frontage_id": "±25 meter × panjang ±20 meter",
-    "frontage_en": "±25 meters × length ±20 meters"
+    "frontage_en": "±25 meters × length ±20 meters",
+    "category": "land"
   },
   {
     "id": 18,
@@ -1078,7 +1095,8 @@
     "status_id": "SHM (Sertifikat Hak Milik)",
     "status_en": "Freehold Title",
     "frontage_id": "±6 Meter",
-    "frontage_en": "±6 meters"
+    "frontage_en": "±6 meters",
+    "category": "land"
   },
   {
     "id": 19,
@@ -1138,7 +1156,8 @@
     "status_id": "SHM (Sertifikat Hak Milik)",
     "status_en": "Freehold Title",
     "frontage_id": "±5 Meter",
-    "frontage_en": "5 meters."
+    "frontage_en": "5 meters.",
+    "category": "land"
   },
   {
     "id": 20,
@@ -1197,7 +1216,8 @@
     "access_id": "jalan, tanah ini menawarkan fleksibilitas dan akses yang sangat baik. Sangat cocok untuk pembangunan rumah tinggal, villa, maupun investasi properti.",
     "access_en": "roads, this land offers excellent flexibility and access. It is suitable for the construction of residential houses, villas, and property investments.",
     "status_id": "3 SHM (Sertifikat Hak Milik)",
-    "status_en": "Freehold Title"
+    "status_en": "Freehold Title",
+    "category": "land"
   },
   {
     "id": 21,
@@ -1253,7 +1273,8 @@
     "access_id": "yang sangat mudah. Lokasinya sangat ideal untuk berbagai jenis usaha maupun investasi properti karena berada di kawasan yang terus berkembang.",
     "access_en": "very easy. The location is ideal for various types of businesses and property investments as it is in a continuously developing area.",
     "status_id": "SHM (Sertifikat Hak Milik)",
-    "status_en": "Freehold Title (SHM)"
+    "status_en": "Freehold Title (SHM)",
+    "category": "land"
   },
   {
     "id": 22,
@@ -1313,7 +1334,8 @@
     "access_id": "yang mudah dijangkau",
     "access_en": "easily accessible",
     "status_id": "SHM (Sertifikat Hak Milik)",
-    "status_en": "Freehold Title (SHM)"
+    "status_en": "Freehold Title (SHM)",
+    "category": "land"
   },
   {
     "id": 23,
@@ -1374,7 +1396,8 @@
     "status_id": "SHM (Sertifikat Hak Milik)",
     "status_en": "Freehold Title (SHM)",
     "frontage_id": "±50 Meter",
-    "frontage_en": "±50 Meters"
+    "frontage_en": "±50 Meters",
+    "category": "land"
   },
   {
     "id": 24,
@@ -1435,7 +1458,8 @@
     "status_id": "2 SHM (Sertifikat Hak Milik)",
     "status_en": "2 Freehold Titles (SHM)",
     "frontage_id": "±5 Meter",
-    "frontage_en": "±5 Meters"
+    "frontage_en": "±5 Meters",
+    "category": "land"
   },
   {
     "id": 25,
@@ -1492,7 +1516,8 @@
     "status_id": "SHM (Sertifikat Hak Milik)",
     "status_en": "Freehold Title (SHM)",
     "frontage_id": "±25 Meter",
-    "frontage_en": "±25 Meters"
+    "frontage_en": "±25 Meters",
+    "category": "land"
   },
   {
     "id": 26,
@@ -1546,7 +1571,8 @@
     "leaseTerm_id": "10 Tahun dengan opsi perpanjangan",
     "leaseTerm_en": "10 Years with renewal option",
     "access_id": "yang ramai dan mudah dijangkau, lahan ini sangat cocok untuk berbagai jenis usaha maupun pengembangan properti dalam jangka panjang.",
-    "access_en": "busy and easily accessible, this land is suitable for various types of businesses and long-term property development."
+    "access_en": "busy and easily accessible, this land is suitable for various types of businesses and long-term property development.",
+    "category": "land"
   },
   {
     "id": 27,
@@ -1609,6 +1635,7 @@
     "view_id": "Garuda Wisnu Kencana (GWK)",
     "view_en": "Garuda Wisnu Kencana (GWK)",
     "status_id": "Freehold (SHM)",
-    "status_en": "Freehold (SHM)"
+    "status_en": "Freehold (SHM)",
+    "category": "villa"
   }
 ]

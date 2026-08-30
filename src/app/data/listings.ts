@@ -1,8 +1,8 @@
-// Property data supporting both lease and sale land listings
 export interface Property {
   id: number;
   slug: string;
   type: "lease" | "sale";
+  category?: "villa" | "land" | "house" | "commercial";
   title: string;
   location: string;
   price: string;

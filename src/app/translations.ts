@@ -14,10 +14,16 @@ export const translations: Record<Language, Record<string, string>> = {
     "hero.title2": "Minimalist",
     "hero.title3": "Architecture",
     "hero.description": "We believe in architecture as a silent poetry of space. Our portfolio represents a meticulous balance between raw materials, natural light, and the tropical landscapes of Bali.",
-    "hero.stat1.label": "Leasehold",
-    "hero.stat2.label": "Sale",
-    "hero.stat3.value": "BALI",
-    "hero.stat3.label": "South Bali",
+    "hero.stat1.label": "Villas",
+    "hero.stat2.label": "Land",
+    "hero.stat3.label": "Houses",
+
+    // Categories
+    "category.all": "All",
+    "category.villa": "Villas",
+    "category.land": "Land",
+    "category.house": "Houses",
+    "category.commercial": "Commercial",
 
     // Property explorer
     "explorer.subtitle": "Portfolio Curation",
@@ -111,10 +117,16 @@ export const translations: Record<Language, Record<string, string>> = {
     "hero.title2": "Minimalis",
     "hero.title3": "Arsitektur",
     "hero.description": "Kami percaya arsitektur sebagai puisi sunyi dari sebuah ruang. Portofolio kami mewakili keseimbangan sempurna antara material mentah, cahaya alami, dan lanskap tropis Bali.",
-    "hero.stat1.label": "Leasehold",
-    "hero.stat2.label": "Dijual",
-    "hero.stat3.value": "BALI",
-    "hero.stat3.label": "Bali Selatan",
+    "hero.stat1.label": "Villa",
+    "hero.stat2.label": "Tanah",
+    "hero.stat3.label": "Rumah",
+
+    // Categories
+    "category.all": "Semua",
+    "category.villa": "Villa",
+    "category.land": "Tanah",
+    "category.house": "Rumah",
+    "category.commercial": "Komersial",
 
     // Property explorer
     "explorer.subtitle": "Kurasi Portofolio",

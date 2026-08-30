@@ -51,13 +51,16 @@ export default function HomePage() {
       });
   }, []);
 
-  const [activeCategory, setActiveCategory] = useState<"lease" | "sale">("lease");
+  type CategoryFilter = "all" | "villa" | "land" | "house" | "commercial";
+  const [activeCategory, setActiveCategory] = useState<CategoryFilter>("all");
 
   // Filter properties based on the selected category
-  const filteredProperties = PROPERTIES.filter((p) => p.type === activeCategory);
+  const filteredProperties = activeCategory === "all" 
+    ? PROPERTIES 
+    : PROPERTIES.filter((p) => p.category === activeCategory);
 
   // Active property state initialized to the first item of the active category
-  const [activeProperty, setActiveProperty] = useState<Property>(filteredProperties[0]);
+  const [activeProperty, setActiveProperty] = useState<Property>(filteredProperties[0] || PROPERTIES[0]);
 
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
@@ -97,10 +100,14 @@ export default function HomePage() {
     );
   }, [activeProperty.images.length]);
 
-  const handleCategoryChange = (category: "lease" | "sale") => {
+  const handleCategoryChange = (category: CategoryFilter) => {
     setActiveCategory(category);
-    const propertiesOfCategory = PROPERTIES.filter((p) => p.type === category);
-    setActiveProperty(propertiesOfCategory[0]);
+    const propertiesOfCategory = category === "all" 
+      ? PROPERTIES 
+      : PROPERTIES.filter((p) => p.category === category);
+    if (propertiesOfCategory.length > 0) {
+      setActiveProperty(propertiesOfCategory[0]);
+    }
     setActiveImageIndex(0);
   };
 
@@ -204,15 +211,15 @@ export default function HomePage() {
             />
             <div className="grid grid-cols-3 gap-4 text-[10px] sm:text-[11px] uppercase tracking-wider text-text-muted">
               <div>
-                <span className="block font-semibold text-primary">{String(PROPERTIES.filter(p => p.type === "lease").length).padStart(2, "0")}</span>
+                <span className="block font-semibold text-primary">{String(PROPERTIES.filter(p => p.category === "villa").length).padStart(2, "0")}</span>
                 <span>{t("hero.stat1.label")}</span>
               </div>
               <div>
-                <span className="block font-semibold text-primary">{String(PROPERTIES.filter(p => p.type === "sale").length).padStart(2, "0")}</span>
+                <span className="block font-semibold text-primary">{String(PROPERTIES.filter(p => p.category === "land").length).padStart(2, "0")}</span>
                 <span>{t("hero.stat2.label")}</span>
               </div>
               <div>
-                <span className="block font-semibold text-primary">{t("hero.stat3.value")}</span>
+                <span className="block font-semibold text-primary">{String(PROPERTIES.filter(p => p.category === "house").length).padStart(2, "0")}</span>
                 <span>{t("hero.stat3.label")}</span>
               </div>
             </div>
@@ -230,41 +237,55 @@ export default function HomePage() {
               <p className="text-xs uppercase tracking-widest text-text-muted mb-2">{t("explorer.subtitle")}</p>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
                 <button
-                  onClick={() => handleCategoryChange("lease")}
-                  className={`text-2xl sm:text-3xl md:text-4xl font-light text-left transition-all ${activeCategory === "lease"
+                  onClick={() => handleCategoryChange("all")}
+                  className={`text-2xl sm:text-3xl md:text-4xl font-light text-left transition-all ${activeCategory === "all"
                     ? "text-primary border-b border-accent pb-1"
                     : "text-text-muted/40 hover:text-primary"
                     }`}
                 >
-                  {t("explorer.lease")}
+                  {t("category.all")}
                 </button>
                 <span className="text-xl sm:text-2xl md:text-3xl font-light text-text-muted/30">/</span>
                 <button
-                  onClick={() => handleCategoryChange("sale")}
-                  className={`text-2xl sm:text-3xl md:text-4xl font-light text-left transition-all ${activeCategory === "sale"
+                  onClick={() => handleCategoryChange("villa")}
+                  className={`text-2xl sm:text-3xl md:text-4xl font-light text-left transition-all ${activeCategory === "villa"
                     ? "text-primary border-b border-accent pb-1"
                     : "text-text-muted/40 hover:text-primary"
                     }`}
                 >
-                  {t("explorer.sale")}
+                  {t("category.villa")}
                 </button>
-              </div>
-            </div>
-
-            {/* Quick tab navigation within active category */}
-            <div className="flex flex-wrap gap-2 md:gap-3">
-              {filteredProperties.map((property) => (
+                <span className="text-xl sm:text-2xl md:text-3xl font-light text-text-muted/30">/</span>
                 <button
-                  key={property.id}
-                  onClick={() => handlePropertyChange(property)}
-                  className={`text-[10px] sm:text-xs uppercase tracking-widest px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border transition-all duration-300 ${activeProperty.id === property.id
-                    ? "bg-primary text-secondary border-primary font-semibold"
-                    : "bg-transparent text-text-muted border-border-custom hover:text-primary hover:border-text-muted"
+                  onClick={() => handleCategoryChange("land")}
+                  className={`text-2xl sm:text-3xl md:text-4xl font-light text-left transition-all ${activeCategory === "land"
+                    ? "text-primary border-b border-accent pb-1"
+                    : "text-text-muted/40 hover:text-primary"
                     }`}
                 >
-                  {pt(property, 'title')}
+                  {t("category.land")}
                 </button>
-              ))}
+                <span className="text-xl sm:text-2xl md:text-3xl font-light text-text-muted/30">/</span>
+                <button
+                  onClick={() => handleCategoryChange("house")}
+                  className={`text-2xl sm:text-3xl md:text-4xl font-light text-left transition-all ${activeCategory === "house"
+                    ? "text-primary border-b border-accent pb-1"
+                    : "text-text-muted/40 hover:text-primary"
+                    }`}
+                >
+                  {t("category.house")}
+                </button>
+                <span className="text-xl sm:text-2xl md:text-3xl font-light text-text-muted/30">/</span>
+                <button
+                  onClick={() => handleCategoryChange("commercial")}
+                  className={`text-2xl sm:text-3xl md:text-4xl font-light text-left transition-all ${activeCategory === "commercial"
+                    ? "text-primary border-b border-accent pb-1"
+                    : "text-text-muted/40 hover:text-primary"
+                    }`}
+                >
+                  {t("category.commercial")}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -502,6 +523,52 @@ export default function HomePage() {
 
             </div>
 
+          </div>
+
+          {/* --- ALL PROPERTIES GRID --- */}
+          <div className="mt-16 md:mt-24 pt-12 md:pt-16 border-t border-border-custom">
+            <h4 className="text-xs sm:text-sm uppercase tracking-widest text-text-muted mb-8 font-semibold">{t("category." + activeCategory)} — {filteredProperties.length} Properties</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {filteredProperties.map((property) => (
+                <div 
+                  key={property.id} 
+                  onClick={() => {
+                    handlePropertyChange(property);
+                    window.scrollTo({ top: document.getElementById('villas')?.offsetTop || 0, behavior: 'smooth' });
+                  }}
+                  className={`group cursor-pointer rounded-2xl overflow-hidden border transition-all duration-300 flex flex-col bg-card-bg/30 hover:bg-card-bg ${activeProperty?.id === property.id ? "border-accent ring-1 ring-accent" : "border-border-custom hover:border-text-muted"}`}
+                >
+                  <div className="relative aspect-[4/3] w-full overflow-hidden">
+                    <img 
+                      src={property.images[0]} 
+                      alt={pt(property, 'title')} 
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-secondary/80 via-transparent to-transparent opacity-60"></div>
+                    <div className="absolute top-4 right-4 bg-secondary/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-border-custom shadow-sm">
+                      <span className="text-[9px] sm:text-[10px] font-semibold text-primary uppercase tracking-wider">{property.price}</span>
+                    </div>
+                  </div>
+                  <div className="p-5 flex flex-col flex-grow">
+                    <div className="flex items-center gap-1.5 text-[10px] text-accent uppercase tracking-widest font-semibold mb-2">
+                      <MapPin className="w-3 h-3" />
+                      <span className="truncate">{property.location}</span>
+                    </div>
+                    <h5 className="text-lg font-light text-primary mb-3 line-clamp-2 leading-snug">{pt(property, 'title')}</h5>
+                    <div className="mt-auto flex items-center gap-4 text-[10px] sm:text-xs text-text-muted border-t border-border-custom pt-4">
+                      <div className="flex items-center gap-1.5">
+                        <Maximize className="w-3.5 h-3.5 text-accent/70" />
+                        <span className="truncate max-w-[100px]">{property.landArea}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 ml-auto">
+                        <Tag className="w-3.5 h-3.5 text-accent/70" />
+                        <span className="capitalize">{property.type === 'sale' ? 'Sale' : 'Lease'}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
         </div>
