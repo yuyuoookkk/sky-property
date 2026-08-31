@@ -29,3 +29,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Prisma & DB
+prisma/
+*.db
+migrate-categories.js
+src/lib/db.ts
+.env
